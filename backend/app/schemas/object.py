@@ -1,17 +1,13 @@
 from pydantic import BaseModel
-from enum import Enum
-
-
-class ObjectStatus(str, Enum):
-    reserved = "RESERVED"
-    donated = "DONATED"
-    available = "AVAILABLE"
+from enums.object_status import ObjectStatus
+from enums.object_category import ObjectCategory
 
 
 class ObjectBase(BaseModel):
     name: str
     description: str
     condition: str
+    category: ObjectCategory
     status: ObjectStatus = ObjectStatus.available
     donorId: int
     donatedTo: int | None = None
