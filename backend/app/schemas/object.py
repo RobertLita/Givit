@@ -1,16 +1,17 @@
 from pydantic import BaseModel
 from enums.object_status import ObjectStatus
 from enums.object_category import ObjectCategory
+from enums.object_condition import ObjectCondition
 
 
 class ObjectBase(BaseModel):
     name: str
     description: str
-    condition: str
+    condition: ObjectCondition
     category: ObjectCategory
     status: ObjectStatus = ObjectStatus.available
     donorId: int
-    donatedTo: int | None = None
+    organizationId: int | None = None
     # TODO images
 
 
