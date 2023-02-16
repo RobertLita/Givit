@@ -9,6 +9,7 @@ class Settings(BaseSettings):
     POSTGRES_DB: str
     DATABASE_URI: PostgresDsn | None = None
     PROJECT_NAME: str
+    DATABASE_ALEMBIC_URL: str
 
     @validator("DATABASE_URI", pre=True)
     def assemble_db_connection(cls, v: list[str] | None, values: dict[str, Any]) -> Any:
