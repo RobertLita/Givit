@@ -1,7 +1,8 @@
 from pydantic import BaseModel
-from enums.user_type import UserType
+from .enums.user_type import UserType
 from app.schemas.reward import Reward
 from app.schemas.object import Object
+from app.schemas.review import Review
 
 
 class UserBase(BaseModel):
@@ -12,6 +13,7 @@ class UserBase(BaseModel):
     donationCount: int = 0
     rewards: list[Reward] = []
     donations: list[Object] = []
+    reviews: list[Review] = []
 
 
 class UserCreate(UserBase):
