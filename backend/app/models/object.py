@@ -9,7 +9,7 @@ from app.db.base_class import Base
 class Object(Base):
     __tablename__ = "object"
 
-    id = Column(Integer, primary_key=True, index=True)
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     name = Column(String, nullable=False)
     description = Column(String, nullable=False)
     condition = Column(Enum(ObjectCondition), nullable=False)
@@ -18,6 +18,6 @@ class Object(Base):
     donorId = Column(Integer, ForeignKey("user.id"), nullable=False)
     organizationId = Column(Integer, ForeignKey("user.id"))
 
-    donor = relationship("User", back_populates="donations")
-    organization = relationship("User", back_populates="donations")
+    donor = relationship("User", foreign_keys=[donorId], back_populates="donations")
+    organization = relationship("User", foreign_keys=[organizationId], back_populates="donations")
     # TODO images
