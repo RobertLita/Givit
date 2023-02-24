@@ -7,6 +7,10 @@ class RewardBase(BaseModel):
     requiredDonations: int
 
 
+class RewardCreate(RewardBase):
+    pass
+
+
 class Reward(RewardBase):
     id: int
 
