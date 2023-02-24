@@ -17,6 +17,4 @@ class User(Base):
 
     donations = relationship("Object", back_populates="donor", foreign_keys="[Object.donorId]")
     reviews = relationship("Review", back_populates="reviewed", foreign_keys="[Review.reviewedId]")
-
-
-User.rewards = relationship("RewardAllocation", back_populates="user")
+    rewards = relationship("RewardAllocation", back_populates="user")

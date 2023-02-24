@@ -5,15 +5,15 @@ from app.schemas.object import Object
 from app.schemas.review import Review
 
 
-class UserBase(BaseModel):
+class UserDetail(BaseModel):
     username: str
+    rating: float = 0.0
+
+
+class UserBase(UserDetail):
     email: str
     type: UserType = UserType.donor
-    rating: float = 0.0
     donationCount: int = 0
-    rewards: list[Reward] = []
-    donations: list[Object] = []
-    reviews: list[Review] = []
 
 
 class UserCreate(UserBase):
@@ -22,6 +22,9 @@ class UserCreate(UserBase):
 
 class User(UserBase):
     id: int
+    rewards: list[Reward] = []
+    donations: list[Object] = []
+    reviews: list[Review] = []
 
     class Config:
         orm_mode = True
