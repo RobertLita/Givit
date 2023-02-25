@@ -13,6 +13,7 @@ class User(Base):
     hashed_password = Column(String)
     type = Column(Enum(UserType), nullable=False, default=UserType.donor)
     rating = Column(Float, default=0.0)
+    reviewCount = Column(Integer, default=0)
     donationCount = Column(Integer, default=0)
 
     donations = relationship("Object", back_populates="donor", foreign_keys="[Object.donorId]")

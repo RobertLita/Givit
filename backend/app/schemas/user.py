@@ -13,7 +13,6 @@ class UserDetail(BaseModel):
 class UserBase(UserDetail):
     email: str
     type: UserType = UserType.donor
-    donationCount: int = 0
 
 
 class UserCreate(UserBase):
@@ -22,6 +21,8 @@ class UserCreate(UserBase):
 
 class User(UserBase):
     id: int
+    reviewCount: int = 0
+    donationCount: int = 0
     rewards: list[Reward] = []
     donations: list[Object] = []
     reviews: list[Review] = []

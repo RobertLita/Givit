@@ -5,11 +5,15 @@ from datetime import datetime
 class RewardAllocationBase(BaseModel):
     userId: int
     rewardId: int
-    acquireDate: datetime
+
+
+class RewardAllocationCreate(RewardAllocationBase):
+    pass
 
 
 class RewardAllocation(RewardAllocationBase):
     id: int
+    acquireDate: datetime
 
     class Config:
         orm_mode = True
