@@ -11,5 +11,7 @@ class RewardAllocation(Base):
     rewardId = Column(Integer, ForeignKey("reward.id"), nullable=False)
     acquireDate = Column(Date, server_default=func.now())
 
-    user = relationship("User", back_populates="rewards", foreign_keys=[userId])
-    reward = relationship("Reward", foreign_keys=[rewardId])
+    reward = relationship("Reward", back_populates="users")
+    user = relationship("User", back_populates="rewards")
+
+    # TODO check for composed pk (from the 2 fk). Same in reviews

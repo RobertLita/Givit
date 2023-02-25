@@ -11,8 +11,11 @@ def get_reviews(db: Session, skip: int = 0, limit: int = 100) -> [Review]:
     return db.query(Review).offset(skip).limit(limit).all()
 
 
+def get_reviewed_users(db: Session, reviewer_id: int) -> [Review.reviewedId]:
+    return db.query(Review.reviewedId).filter(Review.reviewerId == reviewer_id).all()
+
+
 def create_review(db: Session, review: ReviewCreate) -> Review:
-    # TODO check if user already voted (check reviewerID -> reviewedID)
     db_review = Review(reviewerId=review.reviewerId, reviewedId=review.reviewedId, amount=review.amount, message=review.message)
     db.add(db_review)
     db.commit()

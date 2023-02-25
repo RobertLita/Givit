@@ -3,6 +3,8 @@ from app.schemas.user import UserCreate
 from app.models.user import User
 
 
+# TODO increment donationCount whenever a donation for this user is created
+# TODO increment reviewCount whenever a review for this user is created
 def get_user(db: Session, user_id: int) -> User:
     return db.query(User).filter(User.id == user_id).first()
 
@@ -18,7 +20,7 @@ def get_users(db: Session, skip: int = 0, limit: int = 100) -> [User]:
 def create_user(db: Session, user: UserCreate) -> User:
     # TODO big todo: handle security or use a third party
     dummyPassword = user.password + "notreallyhashed"
-    db_user = User(username=user.username, email=user.email, hashed_password=dummyPassword, type=user.type, rating=user.rating, donationCount=user.donationCount)
+    db_user = User(username=user.username, email=user.email, hashed_password=dummyPassword, type=user.type)
     db.add(db_user)
     db.commit()
     db.refresh(db_user)

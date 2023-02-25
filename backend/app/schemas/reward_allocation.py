@@ -1,5 +1,6 @@
 from pydantic import BaseModel
-from datetime import datetime
+from datetime import date
+from app.schemas.reward import Reward
 
 
 class RewardAllocationBase(BaseModel):
@@ -13,7 +14,8 @@ class RewardAllocationCreate(RewardAllocationBase):
 
 class RewardAllocation(RewardAllocationBase):
     id: int
-    acquireDate: datetime
+    acquireDate: date
+    reward: Reward
 
     class Config:
         orm_mode = True

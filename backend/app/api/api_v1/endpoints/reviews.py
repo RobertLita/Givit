@@ -15,6 +15,9 @@ async def read_reviews(skip: int = 0, limit: int = 10, db: Session = Depends(dep
 
 @router.post("/", response_model=Review)
 async def create_review(review: ReviewCreate, db: Session = Depends(deps.get_db)):
+    reviewed_users = crud_reviews.get_reviewed_users(db, review.reviewerId)
+    if any(x[0] == review.reviewedId for x in reviewed_users):
+        raise HTTPException(status_code=409, detail="This user has already been reviewed")
     return crud_reviews.create_review(db, review)
 
 
@@ -22,7 +25,7 @@ async def create_review(review: ReviewCreate, db: Session = Depends(deps.get_db)
 async def read_review(review_id: int, db: Session = Depends(deps.get_db)):
     db_review = crud_reviews.get_review(db, review_id)
     if db_review is None:
-        raise HTTPException(status_code=404, detail=f"Review was not found")
+        raise HTTPException(status_code=404, detail="Review was not found")
     return db_review
 
 
