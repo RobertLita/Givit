@@ -14,4 +14,3 @@ class RewardAllocation(Base):
     reward = relationship("Reward", back_populates="users")
     user = relationship("User", back_populates="rewards")
 
-    # TODO check for composed pk (from the 2 fk). Same in reviews

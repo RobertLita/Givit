@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, validator
 from .enums.user_type import UserType
 from app.schemas.reward_allocation import RewardAllocation
 from app.schemas.object import Object
@@ -9,10 +9,22 @@ class UserDetail(BaseModel):
     username: str
     rating: float = 0.0
 
+    @validator("username")
+    def check_username(cls, username):
+        if len(username) > 15:
+            raise ValueError('Username must be 15 characters or less')
+        return username
+
 
 class UserBase(UserDetail):
     email: str
     type: UserType = UserType.donor
+
+    @validator("email")
+    def check_email(cls, email):
+        if '@' not in email or '.' not in email:
+            raise ValueError('Email is not valid')
+        return email
 
 
 class UserCreate(UserBase):
