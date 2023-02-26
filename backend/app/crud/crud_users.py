@@ -3,8 +3,6 @@ from app.schemas.user import UserCreate
 from app.models.user import User
 
 
-# TODO increment donationCount whenever a donation for this user is created
-# TODO increment reviewCount whenever a review for this user is created
 def get_user(db: Session, user_id: int) -> User:
     return db.query(User).filter(User.id == user_id).first()
 
@@ -40,3 +38,19 @@ def update_user(db: Session, existing_user: User, object_user: User) -> User:
         setattr(existing_user, key, value)
     db.commit()
     return existing_user
+
+
+def increment_donation(db: Session, user_id: int) -> User:
+    db_user = get_user(db, user_id)
+    setattr(db_user, "donationCount", db_user.donationCount + 1)
+    db.commit()
+    return db_user
+
+
+def add_review_to_user(db: Session, user_id: int, rating_amount: int) -> User:
+    db_user = get_user(db, user_id)
+    new_rating = round((db_user.rating * db_user.reviewCount + rating_amount) / (db_user.reviewCount + 1), 2)
+    setattr(db_user, "reviewCount", db_user.reviewCount + 1)
+    setattr(db_user, "rating", new_rating)
+    db.commit()
+    return db_user

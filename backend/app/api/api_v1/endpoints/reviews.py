@@ -3,6 +3,7 @@ from app.api import deps
 from sqlalchemy.orm import Session
 from ....crud import crud_reviews
 from app.schemas.review import Review, ReviewCreate
+from app.crud.crud_users import add_review_to_user
 
 router = APIRouter()
 
@@ -15,10 +16,14 @@ async def read_reviews(skip: int = 0, limit: int = 10, db: Session = Depends(dep
 
 @router.post("/", response_model=Review)
 async def create_review(review: ReviewCreate, db: Session = Depends(deps.get_db)):
+    if review.reviewedId is None or review.reviewerId is None:
+        raise HTTPException(status_code=400, detail="Review has one or more empty fields")
     reviewed_users = crud_reviews.get_reviewed_users(db, review.reviewerId)
     if any(x[0] == review.reviewedId for x in reviewed_users):
         raise HTTPException(status_code=409, detail="This user has already been reviewed")
-    return crud_reviews.create_review(db, review)
+    new_review = crud_reviews.create_review(db, review)
+    add_review_to_user(db, review.reviewedId, review.amount)
+    return new_review
 
 
 @router.get("/{review_id}", response_model=Review)
