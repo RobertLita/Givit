@@ -13,4 +13,3 @@ class RewardAllocation(Base):
 
     reward = relationship("Reward", back_populates="users")
     user = relationship("User", back_populates="rewards")
-

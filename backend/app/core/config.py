@@ -1,5 +1,6 @@
 from pydantic import BaseSettings, PostgresDsn, validator
 from typing import Any
+import secrets
 
 
 class Settings(BaseSettings):
@@ -10,6 +11,8 @@ class Settings(BaseSettings):
     DATABASE_URI: PostgresDsn | None = None
     PROJECT_NAME: str
     DATABASE_ALEMBIC_URL: str
+    SECRET_KEY: str = secrets.token_urlsafe(32)
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 8
 
     @validator("DATABASE_URI", pre=True)
     def assemble_db_connection(cls, v: list[str] | None, values: dict[str, Any]) -> Any:

@@ -19,6 +19,7 @@ class UserDetail(BaseModel):
 class UserBase(UserDetail):
     email: str
     type: UserType = UserType.donor
+    is_superuser: bool = False
 
     @validator("email")
     def check_email(cls, email):
@@ -34,6 +35,7 @@ class UserCreate(UserBase):
 class User(UserBase):
     id: int
 
+    is_active: bool = True
     donationCount: int = 0
     reviewCount: int = 0
     rewards: list[RewardAllocation] = []
@@ -42,3 +44,7 @@ class User(UserBase):
 
     class Config:
         orm_mode = True
+
+
+class UserInDB(User):
+    hashed_password: str
