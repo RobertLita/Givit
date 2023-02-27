@@ -15,8 +15,9 @@ router = APIRouter()
 
 
 @router.post("/login/access-token", response_model=Token)
-async def login_access_token(db: Session = Depends(deps.get_db),
-                             form_data: OAuth2PasswordRequestForm = Depends()) -> Any:
+async def login_access_token(
+    db: Session = Depends(deps.get_db), form_data: OAuth2PasswordRequestForm = Depends()
+) -> Any:
     user = crud_users.authenticate(
         db, email=form_data.username, password=form_data.password
     )
@@ -36,5 +37,6 @@ async def login_access_token(db: Session = Depends(deps.get_db),
 @router.post("/login/test-token", response_model=UserSchema)
 def test_token(current_user: UserModel = Depends(deps.get_current_user)) -> Any:
     return current_user
+
 
 # TODO reset password & recover password

@@ -8,6 +8,7 @@ from app.db.base_class import Base
 
 # TODO cascade or other constraints
 
+
 class Object(Base):
     __tablename__ = "object"
 
@@ -21,5 +22,7 @@ class Object(Base):
     organizationId = Column(Integer, ForeignKey("user.id"))
 
     donor = relationship("User", foreign_keys=[donorId], back_populates="donations")
-    organization = relationship("User", foreign_keys=[organizationId], back_populates="donations")
+    organization = relationship(
+        "User", foreign_keys=[organizationId], back_populates="donations"
+    )
     # TODO images

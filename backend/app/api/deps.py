@@ -23,7 +23,9 @@ def get_db() -> Generator:
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/login/access-token")
 
 
-async def get_current_user(db: Session = Depends(get_db), token: str = Depends(oauth2_scheme)) -> User:
+async def get_current_user(
+    db: Session = Depends(get_db), token: str = Depends(oauth2_scheme)
+) -> User:
     try:
         payload = jwt.decode(
             token, settings.SECRET_KEY, algorithms=[security.ALGORITHM]
@@ -41,7 +43,7 @@ async def get_current_user(db: Session = Depends(get_db), token: str = Depends(o
 
 
 async def get_current_active_user(
-        current_user: User = Depends(get_current_user),
+    current_user: User = Depends(get_current_user),
 ) -> User:
     if not crud_users.is_active(current_user):
         raise HTTPException(status_code=400, detail="Inactive user")
@@ -49,7 +51,7 @@ async def get_current_active_user(
 
 
 async def get_current_active_superuser(
-        current_user: User = Depends(get_current_user),
+    current_user: User = Depends(get_current_user),
 ) -> User:
     if not crud_users.is_superuser(current_user):
         raise HTTPException(

@@ -12,7 +12,11 @@ def get_reward(db: Session, reward_id: int) -> Reward:
 
 
 def create_reward(db: Session, reward_body: RewardCreate) -> Reward:
-    db_reward = Reward(name=reward_body.name, description=reward_body.description, requiredDonations=reward_body.requiredDonations)
+    db_reward = Reward(
+        name=reward_body.name,
+        description=reward_body.description,
+        requiredDonations=reward_body.requiredDonations,
+    )
     db.add(db_reward)
     db.commit()
     db.refresh(db_reward)
@@ -32,4 +36,3 @@ def update_reward(db: Session, existing_reward: Reward, reward_body: Reward) -> 
         setattr(existing_reward, key, value)
     db.commit()
     return existing_reward
-    

@@ -9,7 +9,9 @@ router = APIRouter()
 
 
 @router.get("/", response_model=list[User])
-async def read_users(skip: int = 0, limit: int = 10, db: Session = Depends(deps.get_db)):
+async def read_users(
+    skip: int = 0, limit: int = 10, db: Session = Depends(deps.get_db)
+):
     users = crud_users.get_users(db, skip, limit)
     return users
 

@@ -17,7 +17,13 @@ def get_users(db: Session, skip: int = 0, limit: int = 100) -> [User]:
 
 
 def create_user(db: Session, user: UserCreate) -> User:
-    db_user = User(username=user.username, email=user.email, hashed_password=get_password_hash(user.password), type=user.type, is_superuser=user.is_superuser)
+    db_user = User(
+        username=user.username,
+        email=user.email,
+        hashed_password=get_password_hash(user.password),
+        type=user.type,
+        is_superuser=user.is_superuser,
+    )
     db.add(db_user)
     db.commit()
     db.refresh(db_user)
@@ -48,7 +54,11 @@ def increment_donation(db: Session, user_id: int) -> User:
 
 def add_review_to_user(db: Session, user_id: int, rating_amount: int) -> User:
     db_user = get_user(db, user_id)
-    new_rating = round((db_user.rating * db_user.reviewCount + rating_amount) / (db_user.reviewCount + 1), 2)
+    new_rating = round(
+        (db_user.rating * db_user.reviewCount + rating_amount)
+        / (db_user.reviewCount + 1),
+        2,
+    )
     setattr(db_user, "reviewCount", db_user.reviewCount + 1)
     setattr(db_user, "rating", new_rating)
     db.commit()

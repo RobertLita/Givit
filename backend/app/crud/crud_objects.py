@@ -12,8 +12,13 @@ def get_object(db: Session, object_id: int) -> Object:
 
 
 def create_object(db: Session, object_body: ObjectCreate) -> Object:
-    db_object = Object(name=object_body.name, description=object_body.description, condition=object_body.condition,
-                       category=object_body.category, donorId=object_body.donorId)
+    db_object = Object(
+        name=object_body.name,
+        description=object_body.description,
+        condition=object_body.condition,
+        category=object_body.category,
+        donorId=object_body.donorId,
+    )
     db.add(db_object)
     db.commit()
     db.refresh(db_object)

@@ -14,16 +14,16 @@ class ObjectBase(BaseModel):
     organizationId: int | None = None
     # TODO images
 
-    @validator('description')
+    @validator("description")
     def check_description(cls, description):
         if len(description) > 150:
-            raise ValueError('Description must be 150 characters or less')
+            raise ValueError("Description must be 150 characters or less")
         return description
 
-    @validator('name')
+    @validator("name")
     def check_name(cls, name):
         if len(name) > 30:
-            raise ValueError('Name must be 30 characters or less')
+            raise ValueError("Name must be 30 characters or less")
         return name
 
 

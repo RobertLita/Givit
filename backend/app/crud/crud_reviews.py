@@ -16,7 +16,12 @@ def get_reviewed_users(db: Session, reviewer_id: int) -> [Review.reviewedId]:
 
 
 def create_review(db: Session, review: ReviewCreate) -> Review:
-    db_review = Review(reviewerId=review.reviewerId, reviewedId=review.reviewedId, amount=review.amount, message=review.message)
+    db_review = Review(
+        reviewerId=review.reviewerId,
+        reviewedId=review.reviewedId,
+        amount=review.amount,
+        message=review.message,
+    )
     db.add(db_review)
     db.commit()
     db.refresh(db_review)

@@ -12,7 +12,7 @@ class UserDetail(BaseModel):
     @validator("username")
     def check_username(cls, username):
         if len(username) > 15:
-            raise ValueError('Username must be 15 characters or less')
+            raise ValueError("Username must be 15 characters or less")
         return username
 
 
@@ -23,8 +23,8 @@ class UserBase(UserDetail):
 
     @validator("email")
     def check_email(cls, email):
-        if '@' not in email or '.' not in email:
-            raise ValueError('Email is not valid')
+        if "@" not in email or "." not in email:
+            raise ValueError("Email is not valid")
         return email
 
 
