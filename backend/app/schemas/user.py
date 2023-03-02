@@ -1,4 +1,5 @@
 from pydantic import BaseModel, validator
+from pydantic.networks import EmailStr
 from .enums.user_type import UserType
 from app.schemas.reward_allocation import RewardAllocation
 from app.schemas.object import Object
@@ -17,15 +18,9 @@ class UserDetail(BaseModel):
 
 
 class UserBase(UserDetail):
-    email: str
+    email: EmailStr
     type: UserType = UserType.donor
     is_superuser: bool = False
-
-    @validator("email")
-    def check_email(cls, email):
-        if "@" not in email or "." not in email:
-            raise ValueError("Email is not valid")
-        return email
 
 
 class UserCreate(UserBase):
@@ -44,6 +39,10 @@ class User(UserBase):
 
     class Config:
         orm_mode = True
+
+
+class UserUpdate(UserBase):
+    password: str
 
 
 class UserInDB(User):

@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from app.schemas.user import UserCreate
+from app.schemas.user import UserCreate, UserInDB
 from app.models.user import User
 from app.core.security import get_password_hash, verify_password
 
@@ -37,7 +37,7 @@ def delete_user(db: Session, user_id: int) -> User:
     return db_user
 
 
-def update_user(db: Session, existing_user: User, object_user: User) -> User:
+def update_user(db: Session, existing_user: User, object_user: User | UserInDB) -> User:
     update_data = object_user.dict(exclude_unset=True)
     for key, value in update_data.items():
         setattr(existing_user, key, value)

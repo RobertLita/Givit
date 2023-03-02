@@ -5,7 +5,7 @@ from fastapi.security import OAuth2PasswordBearer
 from app.models.user import User
 from sqlalchemy.orm import Session
 from app.core.config import settings
-from jose import jwt, JWTError
+from jose import JWTError, jwt
 from app.core import security
 from app.schemas.token import TokenPayload
 from pydantic import ValidationError
