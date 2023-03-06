@@ -20,7 +20,11 @@ async def read_allocations(
 async def create_allocation(
     allocation: RewardAllocationCreate, db: Session = Depends(deps.get_db)
 ):
-    return crud_reward_allocation.create_allocation(db, allocation)
+    existing_allocation = crud_reward_allocation.get_allocation_pair(db, allocation.userId, allocation.rewardId)
+    if existing_allocation is None:
+        return crud_reward_allocation.create_allocation(db, allocation)
+    else:
+        raise HTTPException(status_code=409, detail="This user already has this reward")
 
 
 @router.get("/{allocation_id}", response_model=RewardAllocation)

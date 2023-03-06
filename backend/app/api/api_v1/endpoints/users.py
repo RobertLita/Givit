@@ -26,7 +26,6 @@ async def read_users(
 async def create_user(
     user: UserCreate,
     db: Session = Depends(deps.get_db),
-    current_user: User = Depends(deps.get_current_active_superuser),
 ):
     db_user = crud_users.get_by_email(db, user.email)
     if db_user:
@@ -72,7 +71,12 @@ async def get_user_rewards(user_id: int, db: Session = Depends(deps.get_db)):
 
 
 @router.patch("/{user_id}", response_model=User)
-async def update_user(user_id: int, user: User, db: Session = Depends(deps.get_db)):
+async def update_user(
+    user_id: int,
+    user: User,
+    db: Session = Depends(deps.get_db),
+    current_user: UserModel = Depends(deps.get_current_active_superuser),
+):
     db_user = crud_users.get_user(db, user_id)
     if db_user is None:
         raise HTTPException(status_code=404, detail="User not found")

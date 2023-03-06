@@ -44,3 +44,7 @@ def update_allocation(
         setattr(existing_allocation, key, value)
     db.commit()
     return existing_allocation
+
+
+def get_allocation_pair(db: Session, user_id: int, reward_id: int) -> RewardAllocation | None:
+    return db.query(RewardAllocation).filter(user_id == RewardAllocation.userId, reward_id == RewardAllocation.rewardId).first()

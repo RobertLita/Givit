@@ -55,6 +55,6 @@ async def get_current_active_superuser(
 ) -> User:
     if not crud_users.is_superuser(current_user):
         raise HTTPException(
-            status_code=400, detail="The user doesn't have enough privileges"
+            status_code=403, detail="The user doesn't have enough privileges"
         )
     return current_user

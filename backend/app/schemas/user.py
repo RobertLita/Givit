@@ -20,7 +20,6 @@ class UserDetail(BaseModel):
 class UserBase(UserDetail):
     email: EmailStr
     type: UserType = UserType.donor
-    is_superuser: bool = False
 
 
 class UserCreate(UserBase):
@@ -31,6 +30,7 @@ class User(UserBase):
     id: int
 
     is_active: bool = True
+    is_superuser: bool = False
     donationCount: int = 0
     reviewCount: int = 0
     rewards: list[RewardAllocation] = []
