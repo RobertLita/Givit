@@ -7,6 +7,10 @@ import Welcome from "./screens/Welcome";
 const Stack = createNativeStackNavigator();
 
 const App = () => {
+  // const screenOptions = {
+  //   headerShown: false,
+  // };
+
   return (
     <NavigationContainer>
       <Stack.Navigator>
