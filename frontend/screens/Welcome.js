@@ -5,21 +5,25 @@ import {
   SafeAreaView,
   StyleSheet,
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 import React, { useState } from "react";
 import Carousel from "../components/Carousel";
 
 const illustrations = [
   { id: 1, source: require("../images/welcome1.jpg") },
   { id: 2, source: require("../images/welcome2.jpg") },
+  { id: 3, source: require("../images/welcome3.jpg") },
 ];
 
 const Welcome = () => {
+  const navigation = useNavigation();
+
   return (
     <SafeAreaView
-      className="justify-center items-center bg-white"
+      className="justify-evenly items-center bg-white"
       style={{ flex: 1 }}
     >
-      <View style={{ flex: 1 }} className="justify-center items-center">
+      <View style={{ flex: 1 }} className="items-center">
         <Text className="text-3xl font-bold">
           Give a <Text className="text-red-400">little.</Text> Help a{" "}
           <Text className="text-red-400">lot.</Text>
@@ -34,17 +38,23 @@ const Welcome = () => {
 
       <View className="justify-center " style={{ flex: 2 }}>
         <TouchableOpacity
-          className="px-20 py-2 bg-red-400 rounded-md mb-6"
+          className="px-20 py-2 bg-red-400 rounded-md mb-6 items-center"
           style={styles.shadow}
+          onPress={() => navigation.navigate("Login")}
         >
           <Text className="text-white text-base">Login</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
-          className="px-20 py-2 bg-white rounded-md"
+          className="px-20 py-2 bg-white rounded-md items-center"
           style={styles.shadow}
         >
-          <Text className="text-base">Sign up</Text>
+          <Text
+            className="text-base"
+            onPress={() => navigation.navigate("Sign up")}
+          >
+            Sign up
+          </Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
