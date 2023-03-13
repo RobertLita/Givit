@@ -1,23 +1,32 @@
 import { StatusBar } from "expo-status-bar";
-import { View } from "react-native";
+import { Image } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Welcome from "./screens/Welcome";
+import Login from "./screens/Login";
+import SignUp from "./screens/SignUp";
 
 const Stack = createNativeStackNavigator();
 
 const App = () => {
-  // const screenOptions = {
-  //   headerShown: false,
-  // };
-
   return (
-    <NavigationContainer>
-      <Stack.Navigator>
-        {/* <Stack.Screen name="Home" component={Home}></Stack.Screen> */}
-        <Stack.Screen name="Welcome" component={Welcome}></Stack.Screen>
-      </Stack.Navigator>
-    </NavigationContainer>
+    <>
+      <StatusBar />
+      <NavigationContainer>
+        <Stack.Navigator
+          screenOptions={{
+            headerShadowVisible: false,
+            headerBackTitleVisible: false,
+            headerTitle: () => {},
+            headerBackImageSource: require("./assets/back.png"),
+          }}
+        >
+          <Stack.Screen name="Welcome" component={Welcome}></Stack.Screen>
+          <Stack.Screen name="Login" component={Login}></Stack.Screen>
+          <Stack.Screen name="Sign up" component={SignUp}></Stack.Screen>
+        </Stack.Navigator>
+      </NavigationContainer>
+    </>
   );
 };
 
