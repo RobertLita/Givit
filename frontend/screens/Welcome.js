@@ -20,10 +20,10 @@ const Welcome = () => {
 
   return (
     <SafeAreaView
-      className="justify-evenly items-center bg-white"
+      className="justify-start items-center bg-white"
       style={{ flex: 1 }}
     >
-      <View style={{ flex: 1 }} className="items-center">
+      <View style={{ flex: 1 }} className="items-center justify-start">
         <Text className="text-3xl font-bold">
           Give a <Text className="text-red-400">little.</Text> Help a{" "}
           <Text className="text-red-400">lot.</Text>
@@ -48,13 +48,9 @@ const Welcome = () => {
         <TouchableOpacity
           className="px-20 py-2 bg-white rounded-md items-center"
           style={styles.shadow}
+          onPress={() => navigation.navigate("Sign up")}
         >
-          <Text
-            className="text-base"
-            onPress={() => navigation.navigate("Sign up")}
-          >
-            Sign up
-          </Text>
+          <Text className="text-base">Sign up</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
