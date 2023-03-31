@@ -1,44 +1,20 @@
-import { View, Text, ScrollView, SafeAreaView, FlatList } from "react-native";
+import { View, Text, SafeAreaView, FlatList } from "react-native";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import React from "react";
 
-const DATA = [
-  {
-    id: "1",
-    title: "First Item",
-  },
-  {
-    id: "2",
-    title: "First Item",
-  },
-  {
-    id: "3",
-    title: "First Item",
-  },
-  {
-    id: "4",
-    title: "First Item",
-  },
-  {
-    id: "5",
-    title: "First Item",
-  },
-  {
-    id: "6",
-    title: "First Item",
-  },
-  {
-    id: "7",
-    title: "First Item",
-  },
-  {
-    id: "8",
-    title: "First Item",
-  },
-];
+const data = {
+  CLOTHING: "tshirt-crew",
+  ELECTRONICS: "headphones",
+  HOUSEHOLD: "table-furniture",
+  TOYS: "teddy-bear",
+  MEDIA: "book-open-variant",
+  SPORT: "basketball",
+  SCHOOL: "school",
+};
 
 const headerTitle = () => {
   return (
-    <Text className="font-bold text-2xl text-black ml-4 mt-12">
+    <Text className="font-bold text-3xl text-black ml-4 mb-6">
       All categories
     </Text>
   );
@@ -49,15 +25,23 @@ const Categories = () => {
     <SafeAreaView style={{ flex: 1 }} className="bg-white">
       <FlatList
         ListHeaderComponent={headerTitle}
-        data={DATA}
-        renderItem={({ item }) => (
-          <View className="bg-green-400 w-11/12 h-28 mx-4" />
+        data={Object.entries(data)}
+        renderItem={({ item, index }) => (
+          <View
+            className="bg-red-400 w-11/12 h-16 mx-4 my-4 justify-around items-center flex-row rounded-md"
+            key={index}
+          >
+            <MaterialCommunityIcons name={item[1]} size={50} color="white" />
+            <Text className="font-semibold text-base w-1/2">{item[0]}</Text>
+            <MaterialCommunityIcons
+              name="arrow-right"
+              size={30}
+              color="black"
+            />
+          </View>
         )}
         keyExtractor={(item) => item.id}
         numColumns={1}
-        contentContainerStyle={{
-          alignItems: "center",
-        }}
       />
     </SafeAreaView>
   );
