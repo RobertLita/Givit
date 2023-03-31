@@ -9,23 +9,32 @@ import SignUp from "./screens/SignUp";
 import Marketplace from "./screens/Marketplace";
 import Profile from "./screens/Profile";
 import Settings from "./screens/Settings";
+import Categories from "./screens/Categories";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
+const screenOptions = {
+  headerShadowVisible: false,
+  headerBackTitleVisible: false,
+  headerTitle: () => {},
+  headerBackImageSource: require("./assets/back.png"),
+};
 
 const Auth = () => {
   return (
-    <Stack.Navigator
-      screenOptions={{
-        headerShadowVisible: false,
-        headerBackTitleVisible: false,
-        headerTitle: () => {},
-        headerBackImageSource: require("./assets/back.png"),
-      }}
-    >
-      <Stack.Screen name="WelcomePage" component={Welcome}></Stack.Screen>
-      <Stack.Screen name="Login" component={Login}></Stack.Screen>
-      <Stack.Screen name="Sign up" component={SignUp}></Stack.Screen>
+    <Stack.Navigator screenOptions={screenOptions}>
+      <Stack.Screen name="WelcomePage" component={Welcome} />
+      <Stack.Screen name="Login" component={Login} />
+      <Stack.Screen name="Sign up" component={SignUp} />
+    </Stack.Navigator>
+  );
+};
+
+const Explore = () => {
+  return (
+    <Stack.Navigator screenOptions={screenOptions}>
+      <Stack.Screen name="Marketplace" component={Marketplace} />
+      <Stack.Screen name="Categories" component={Categories} />
     </Stack.Navigator>
   );
 };
@@ -63,7 +72,7 @@ const App = () => {
           })}
         >
           <Tab.Screen name="Welcome" component={Auth}></Tab.Screen>
-          <Tab.Screen name="Explore" component={Marketplace}></Tab.Screen>
+          <Tab.Screen name="Explore" component={Explore}></Tab.Screen>
           <Tab.Screen name="Profile" component={Profile}></Tab.Screen>
           <Tab.Screen name="Settings" component={Settings}></Tab.Screen>
         </Tab.Navigator>
