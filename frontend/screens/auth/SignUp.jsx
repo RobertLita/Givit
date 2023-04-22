@@ -7,13 +7,14 @@ import {
 } from "react-native";
 import React, { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
-import Input from "../components/Input";
+import Input from "../../components/Input";
 
-const Login = () => {
+const SignUp = () => {
   const navigation = useNavigation();
   // TODO validate inputs
 
   const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
   const handleSubmit = (e) => {
@@ -24,14 +25,11 @@ const Login = () => {
 
   return (
     <SafeAreaView style={{ flex: 1 }} className="bg-white">
-      <View style={{ flex: 1 }}>
-        <Text className="font-bold text-3xl text-black ml-4">Login</Text>
-        <Text className="text-lg font-bold ml-4 mt-2 text-gray-400">
-          Please sign in to continue.
-        </Text>
-      </View>
-
-      <View style={{ flex: 2 }} className="w-full items-center justify-evenly">
+      <Text className="font-bold text-3xl text-black ml-4" style={{ flex: 1 }}>
+        Sign up
+      </Text>
+      <View style={{ flex: 4 }} className="w-full items-center justify-evenly">
+        <Input label="Username*" value={username} setValue={setUsername} />
         <Input label="Email*" value={email} setValue={setEmail} email />
         <Input
           label="Password*"
@@ -47,22 +45,16 @@ const Login = () => {
           className="px-20 py-2 bg-red-400 rounded-md items-center"
           style={styles.shadow}
         >
-          <Text className="text-white text-base">Login</Text>
+          <Text className="text-white text-base">Sign up</Text>
         </TouchableOpacity>
         <Text className="text-base font-semibold text-gray-400 mt-5">
-          Don't have an account?{" "}
+          Have an account?{" "}
           <Text
             className="text-red-400"
-            onPress={() => navigation.navigate("Sign up")}
+            onPress={() => navigation.navigate("Login")}
           >
-            Sign up
+            Login
           </Text>
-        </Text>
-        <Text
-          className="text-base font-semibold text-gray-300 mt-4"
-          onPress={() => navigation.navigate("Sign up")}
-        >
-          Forgot your password?
         </Text>
       </View>
     </SafeAreaView>
@@ -79,4 +71,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Login;
+export default SignUp;

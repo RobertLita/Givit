@@ -1,8 +1,8 @@
 import { View, Text, ScrollView, SafeAreaView, FlatList } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import React from "react";
-import MarketplaceHeader from "../components/MarketplaceHeader";
-import Donation from "../components/Donation";
+import MarketplaceHeader from "../../components/MarketplaceHeader";
+import Donation from "../../components/Donation";
 
 const DATA = [
   {

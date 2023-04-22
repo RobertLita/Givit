@@ -7,12 +7,12 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import React, { useState } from "react";
-import Carousel from "../components/Carousel";
+import Carousel from "../../components/Carousel";
 
 const illustrations = [
-  { id: 1, source: require("../images/welcome1.jpg") },
-  { id: 2, source: require("../images/welcome2.jpg") },
-  { id: 3, source: require("../images/welcome3.jpg") },
+  { id: 1, source: require("../../images/welcome1.jpg") },
+  { id: 2, source: require("../../images/welcome2.jpg") },
+  { id: 3, source: require("../../images/welcome3.jpg") },
 ];
 
 const Welcome = () => {
