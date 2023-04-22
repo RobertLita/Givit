@@ -25,12 +25,10 @@ const Categories = () => {
     <SafeAreaView style={{ flex: 1 }} className="bg-white">
       <FlatList
         ListHeaderComponent={headerTitle}
+        keyExtractor={(item) => item[1]}
         data={Object.entries(data)}
-        renderItem={({ item, index }) => (
-          <View
-            className="bg-red-400 w-11/12 h-16 mx-4 my-4 justify-around items-center flex-row rounded-md"
-            key={index}
-          >
+        renderItem={({ item }) => (
+          <View className="bg-red-400 w-11/12 h-16 mx-4 my-4 justify-around items-center flex-row rounded-md">
             <MaterialCommunityIcons name={item[1]} size={50} color="white" />
             <Text className="font-semibold text-base w-1/2">{item[0]}</Text>
             <MaterialCommunityIcons
@@ -40,7 +38,6 @@ const Categories = () => {
             />
           </View>
         )}
-        keyExtractor={(item) => item.id}
         numColumns={1}
       />
     </SafeAreaView>

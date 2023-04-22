@@ -8,9 +8,6 @@ const data = {
   ELECTRONICS: "headphones",
   HOUSEHOLD: "table-furniture",
   TOYS: "teddy-bear",
-  MEDIA: "book-open-variant",
-  SPORT: "basketball",
-  SCHOOL: "school",
 };
 
 const MarketplaceHeader = () => {
@@ -47,18 +44,19 @@ const MarketplaceHeader = () => {
           paddingHorizontal: 20,
         }}
       >
-        {Object.entries(data).map(([key, value]) => (
+        {Object.entries(data).map(([key, value], index) => (
           <View
             className="items-center justify-center"
             onPress={() => {
               // filter data + highlight container
             }}
+            key={index}
           >
-            <View className="bg-red-400 w-28 h-28 mx-3 rounded-full items-center justify-center">
+            <View className="bg-red-400 w-20 h-20 mx-3 rounded-full items-center justify-center">
               <MaterialCommunityIcons
                 key={key}
                 name={value}
-                size={50}
+                size={45}
                 color="white"
               />
             </View>

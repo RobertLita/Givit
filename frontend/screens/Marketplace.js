@@ -2,6 +2,7 @@ import { View, Text, ScrollView, SafeAreaView, FlatList } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import React from "react";
 import MarketplaceHeader from "../components/MarketplaceHeader";
+import Donation from "../components/Donation";
 
 const DATA = [
   {
@@ -59,14 +60,28 @@ const Marketplace = () => {
     <SafeAreaView style={{ flex: 1 }} className="bg-white">
       <FlatList
         numColumns={2}
+        keyExtractor={(item) => item.id}
         contentContainerStyle={{
           alignItems: "center",
         }}
+        columnWrapperStyle={{ justifyContent: "space-between" }}
         data={DATA}
-        renderItem={({ item }) => (
-          <View className="bg-green-400 w-5/12 h-28 my-4 mx-4" />
+        renderItem={({ item, index }) => (
+          <Donation
+            key={index}
+            name="Jucarie de plus"
+            status="NEW"
+            condition="VERY GOOD"
+            username="robert"
+            className="bg-gray-100 h-60 my-2 rounded-md border border-gray-300"
+            style={{ width: "48%" }}
+          />
         )}
-        keyExtractor={(item) => item.id}
+        // getItemLayout={(data, index) => ({
+        //   length: 160,
+        //   offset: 160 * index,
+        //   index,
+        // })}
         ListHeaderComponent={MarketplaceHeader}
       />
     </SafeAreaView>
