@@ -39,6 +39,14 @@ const Explore = () => {
   );
 };
 
+const You = () => {
+  return (
+    <Stack.Navigator screenOptions={screenOptions}>
+      <Stack.Screen name="Profile" component={Profile} />
+    </Stack.Navigator>
+  );
+};
+
 const App = () => {
   return (
     <>
@@ -54,7 +62,7 @@ const App = () => {
                 iconName = focused ? "home" : "home-outline";
               } else if (rn == "Explore") {
                 iconName = focused ? "compass" : "compass-outline";
-              } else if (rn === "Profile") {
+              } else if (rn === "You") {
                 iconName = focused ? "person" : "person-outline";
               } else if (rn === "Settings") {
                 iconName = focused ? "settings" : "settings-outline";
@@ -73,7 +81,7 @@ const App = () => {
         >
           <Tab.Screen name="Welcome" component={Auth}></Tab.Screen>
           <Tab.Screen name="Explore" component={Explore}></Tab.Screen>
-          <Tab.Screen name="Profile" component={Profile}></Tab.Screen>
+          <Tab.Screen name="You" component={You}></Tab.Screen>
           <Tab.Screen name="Settings" component={Settings}></Tab.Screen>
         </Tab.Navigator>
       </NavigationContainer>
