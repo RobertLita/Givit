@@ -59,29 +59,22 @@ const Marketplace = () => {
   return (
     <SafeAreaView style={{ flex: 1 }} className="bg-white">
       <FlatList
-        numColumns={2}
         keyExtractor={(item) => item.id}
         contentContainerStyle={{
           alignItems: "center",
         }}
-        columnWrapperStyle={{ justifyContent: "space-between" }}
         data={DATA}
         renderItem={({ item, index }) => (
           <Donation
             key={index}
             name="Jucarie de plus"
-            status="NEW"
-            condition="VERY GOOD"
+            status="AVAILABLE"
+            condition="ACCEPTABLE"
             username="robert"
-            className="bg-gray-100 h-60 my-2 rounded-md border border-gray-300"
-            style={{ width: "48%" }}
+            className="bg-green-100 h-60 my-2 rounded-md border border-gray-300 flex-row w-11/12"
+            // style={{ width: "80%" }}
           />
         )}
-        // getItemLayout={(data, index) => ({
-        //   length: 160,
-        //   offset: 160 * index,
-        //   index,
-        // })}
         ListHeaderComponent={MarketplaceHeader}
       />
     </SafeAreaView>
