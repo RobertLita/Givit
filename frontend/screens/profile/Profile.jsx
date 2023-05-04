@@ -8,8 +8,26 @@ import {
 import React from "react";
 import { FontAwesome } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
+import ProfileItem from "../../components/ProfileItem";
 
 const Profile = () => {
+  const settingsItems = [
+    {
+      name: "Donations",
+      icon: "gift",
+      linkTo: null,
+    },
+    {
+      name: "Reviews",
+      icon: "sticky-note-o",
+      linkTo: null,
+    },
+    {
+      name: "Rewards",
+      icon: "trophy",
+      linkTo: null,
+    },
+  ];
   // fetch details from current user
   const username = "lita.robert";
   const type = "donor";
@@ -41,50 +59,17 @@ const Profile = () => {
       </View>
 
       <View className="w-full mt-4 justify-evenly" style={{ flex: 3 }}>
-        <View className="flex-row py-3 items-center mx-5 justify-around ">
-          <View className="rounded-full bg-orange-100 w-12 h-12 items-center justify-center">
-            <FontAwesome name="gift" size={30} color="#F9AC67" />
-          </View>
-          <Text className="text-black-400 font-medium text-xl w-1/3">
-            Donations
-          </Text>
-          <TouchableOpacity>
-            <View className="w-10 h-10 rounded bg-gray-300 justify-center items-center ">
-              <MaterialIcons name="arrow-forward-ios" size={24} color="black" />
-            </View>
-          </TouchableOpacity>
-        </View>
-
-        <View className="flex-row py-3 items-center mx-5 justify-around ">
-          <View className="rounded-full bg-orange-100 w-12 h-12 items-center justify-center ">
-            <FontAwesome name="sticky-note-o" size={30} color="#F9AC67" />
-          </View>
-          <Text className="text-black-400 font-medium text-xl w-1/3">
-            Reviews
-          </Text>
-          <TouchableOpacity>
-            <View className="w-10 h-10 rounded bg-gray-300 justify-center items-center ">
-              <MaterialIcons name="arrow-forward-ios" size={24} color="black" />
-            </View>
-          </TouchableOpacity>
-        </View>
-
-        <View className="flex-row py-3 items-center mx-5 justify-around ">
-          <View className="rounded-full bg-orange-100 w-12 h-12 items-center justify-center ">
-            <FontAwesome name="trophy" size={30} color="#F9AC67" />
-          </View>
-          <Text className="text-black-400 font-medium text-xl w-1/3">
-            Rewards
-          </Text>
-          <TouchableOpacity>
-            <View className="w-10 h-10 rounded bg-gray-300 justify-center items-center ">
-              <MaterialIcons name="arrow-forward-ios" size={24} color="black" />
-            </View>
-          </TouchableOpacity>
-        </View>
+        {settingsItems.map((item, index) => (
+          <ProfileItem
+            key={index}
+            title={item.name}
+            iconName={item.icon}
+            linkTo={item.linkTo}
+          />
+        ))}
       </View>
 
-      <View className="justify-center w-full items-center" style={{ flex: 2 }}>
+      <View className="justify-center w-full items-center" style={{ flex: 1 }}>
         <TouchableOpacity
           className="px-12 py-3 bg-red-400 rounded-md flex-row w-1/2"
           style={styles.shadow}
