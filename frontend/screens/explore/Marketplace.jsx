@@ -1,5 +1,4 @@
-import { View, Text, ScrollView, SafeAreaView, FlatList } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { SafeAreaView, FlatList } from "react-native";
 import React from "react";
 import MarketplaceHeader from "../../components/MarketplaceHeader";
 import Donation from "../../components/Donation";
@@ -57,7 +56,7 @@ const DATA = [
 
 const Marketplace = () => {
   return (
-    <SafeAreaView style={{ flex: 1 }} className="bg-white">
+    <SafeAreaView style={{ flex: 1 }} className="bg-white ">
       <FlatList
         keyExtractor={(item) => item.id}
         contentContainerStyle={{
@@ -67,12 +66,13 @@ const Marketplace = () => {
         renderItem={({ item, index }) => (
           <Donation
             key={index}
+            category="PERSONAL"
             name="Jucarie de plus"
             status="AVAILABLE"
             condition="ACCEPTABLE"
             username="robert"
-            className="bg-green-100 h-60 my-2 rounded-md border border-gray-300 flex-row w-11/12"
-            // style={{ width: "80%" }}
+            date="2023-05-04"
+            className="bg-gray-100 h-60 my-2 rounded-md border border-gray-300 flex-row w-11/12"
           />
         )}
         ListHeaderComponent={MarketplaceHeader}

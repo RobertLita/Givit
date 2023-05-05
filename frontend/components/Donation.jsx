@@ -1,26 +1,44 @@
-import { View, Text, Image } from "react-native";
+import { View, Text, Image, TouchableOpacity } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import React, { useState } from "react";
 import Badge from "./Badge";
 import { FontAwesome } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
 
-const Donation = ({ name, status, condition, image, username, ...rest }) => {
-  const stars = {
-    NEW: [1, 1, 1, 1, 1],
-    "VERY GOOD": [1, 1, 1, 1, 0.5],
-    GOOD: [1, 1, 1, 1, 0],
-    ACCEPTABLE: [1, 1, 1, 0.5, 0],
-  };
+const stars = {
+  NEW: [1, 1, 1, 1, 1],
+  "VERY GOOD": [1, 1, 1, 1, 0.5],
+  GOOD: [1, 1, 1, 1, 0],
+  ACCEPTABLE: [1, 1, 1, 0.5, 0],
+};
+
+const Donation = ({
+  name,
+  status,
+  condition,
+  image,
+  username,
+  category,
+  id,
+  date,
+  ...rest
+}) => {
   const [fav, setFav] = useState(false);
+  const navigation = useNavigation();
+
   return (
-    <View style={{ flex: 1 }} {...rest}>
+    <TouchableOpacity
+      style={{ flex: 1 }}
+      {...rest}
+      onPress={() => navigation.navigate("DonationDetails", { id })}
+    >
       <Image
         source={require("../images/welcome2.jpg")}
         style={{ width: "40%", height: "100%" }}
       />
       <View style={{ flex: 1 }}>
         <View className="flex-row justify-between mt-3" style={{ flex: 1 }}>
-          <Badge label="CLOTHING" />
+          <Badge label={category} />
           {!fav ? (
             <AntDesign
               name="hearto"
@@ -52,7 +70,14 @@ const Donation = ({ name, status, condition, image, username, ...rest }) => {
               {stars[condition].map((star, index) => {
                 if (star === 1) {
                   // full star
-                  return <FontAwesome name="star" size={24} color="#F9AC67" />;
+                  return (
+                    <FontAwesome
+                      name="star"
+                      size={24}
+                      color="#F9AC67"
+                      key={index}
+                    />
+                  );
                 } else if (star === 0.5) {
                   // half star
                   return (
@@ -60,12 +85,18 @@ const Donation = ({ name, status, condition, image, username, ...rest }) => {
                       name="star-half-empty"
                       size={24}
                       color="#F9AC67"
+                      key={index}
                     />
                   );
                 } else {
                   // empty star
                   return (
-                    <FontAwesome name="star-o" size={24} color="#F9AC67" />
+                    <FontAwesome
+                      name="star-o"
+                      size={24}
+                      color="#F9AC67"
+                      key={index}
+                    />
                   );
                 }
               })}
@@ -76,10 +107,10 @@ const Donation = ({ name, status, condition, image, username, ...rest }) => {
           <Text>Donated by: {username}</Text>
         </View>
         <View className="justify-center items-center" style={{ flex: 1 }}>
-          <Text className="text-gray-700">2023-05-04</Text>
+          <Text className="text-gray-700">{date}</Text>
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 

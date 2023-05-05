@@ -10,6 +10,7 @@ import Marketplace from "./screens/explore/Marketplace";
 import Profile from "./screens/profile/Profile";
 import Settings from "./screens/Settings";
 import Categories from "./screens/explore/Categories";
+import DonationDetails from "./screens/explore/DonationDetails";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -35,6 +36,7 @@ const Explore = () => {
     <Stack.Navigator screenOptions={screenOptions}>
       <Stack.Screen name="Marketplace" component={Marketplace} />
       <Stack.Screen name="Categories" component={Categories} />
+      <Stack.Screen name="DonationDetails" component={DonationDetails} />
     </Stack.Navigator>
   );
 };
