@@ -19,6 +19,7 @@ const screenOptions = {
   headerBackTitleVisible: false,
   headerTitle: () => {},
   headerBackImageSource: require("./assets/back.png"),
+  unmountOnBlur: true,
 };
 
 const Auth = () => {
@@ -77,7 +78,7 @@ const App = () => {
             tabBarLabelStyle: { paddingBottom: 5, fontSize: 10 },
             tabBarStyle: { padding: 5, height: 50 },
             tabBarHideOnKeyboard: true,
-
+            unmountOnBlur: true,
             headerShown: false,
           })}
         >
