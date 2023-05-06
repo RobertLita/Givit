@@ -10,8 +10,8 @@ import React, { useState } from "react";
 import { useRoute } from "@react-navigation/native";
 import Carousel from "../../components/Carousel";
 import Badge from "../../components/Badge";
+import { MaterialIcons } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
-import { FontAwesome } from "@expo/vector-icons";
 
 const illustrations = [
   { id: 1, source: require("../../images/welcome1.jpg") },
@@ -51,7 +51,7 @@ const DonationDetails = () => {
         <View className="h-72">
           <Carousel images={illustrations} />
         </View>
-        <View className="mt-8 w-full bg-gray-100 rounded-2xl justify-evenly h-96 mb-12">
+        <View className="mt-8 w-full bg-gray-100 rounded-2xl justify-evenly mb-12 h-96">
           <Text className="text-2xl ml-3">{name}</Text>
           <View className="items-center w-full">
             <Badge label={category} />
@@ -63,9 +63,9 @@ const DonationDetails = () => {
                 if (star === 1) {
                   // full star
                   return (
-                    <FontAwesome
+                    <MaterialIcons
                       name="star"
-                      size={28}
+                      size={30}
                       color="#F9AC67"
                       key={index}
                     />
@@ -73,9 +73,9 @@ const DonationDetails = () => {
                 } else if (star === 0.5) {
                   // half star
                   return (
-                    <FontAwesome
-                      name="star-half-empty"
-                      size={28}
+                    <MaterialIcons
+                      name="star-half"
+                      size={30}
                       color="#F9AC67"
                       key={index}
                     />
@@ -83,9 +83,9 @@ const DonationDetails = () => {
                 } else {
                   // empty star
                   return (
-                    <FontAwesome
-                      name="star-o"
-                      size={28}
+                    <MaterialIcons
+                      name="star-outline"
+                      size={30}
                       color="#F9AC67"
                       key={index}
                     />
@@ -93,10 +93,38 @@ const DonationDetails = () => {
                 }
               })}
             </View>
-            <Text className="text-gray-700 ml-3 text-base">({condition})</Text>
+            <Text className="text-gray-500 ml-3 text-base">({condition})</Text>
           </View>
-          <Text className="text-lg ml-3 mr-3">Donated by {username}</Text>
-          <View className="justify-center items-center">
+
+          <View className="flex-row items-center justify-evenly">
+            {status === "AVAILABLE" ? (
+              <View className="py-2 px-3 border justify-center items-center rounded-lg border-gray-500">
+                <Text>AVAILABLE</Text>
+              </View>
+            ) : (
+              <Text>AVAILABLE</Text>
+            )}
+
+            <MaterialIcons name="horizontal-rule" size={24} color="black" />
+            {status === "RESERVED" ? (
+              <View className="py-2 px-3 border justify-center items-center rounded-lg border-gray-500">
+                <Text>RESERVED</Text>
+              </View>
+            ) : (
+              <Text>RESERVED</Text>
+            )}
+            <MaterialIcons name="horizontal-rule" size={24} color="black" />
+            {status === "DONATED" ? (
+              <View className="py-2 px-3 border justify-center items-center rounded-lg border-gray-500">
+                <Text>DONATED</Text>
+              </View>
+            ) : (
+              <Text>DONATED</Text>
+            )}
+          </View>
+
+          <View className="justify-around items-center flex-row">
+            <Text className="text-lg ml-3 mr-3">Donated by {username}</Text>
             <Text className="text-base ml-3 mr-3">{date}</Text>
           </View>
         </View>
