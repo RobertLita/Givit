@@ -17,13 +17,14 @@ const Input = ({
   const inputType = email ? "email-address" : "default";
 
   const renderLabel = () => {
+    if (label === undefined) return <></>;
     if (error)
       return <Text className="text-red-600 text-lg mb-1">{label}</Text>;
     return <Text className="text-gray-400 text-lg mb-1">{label}</Text>;
   };
 
   return (
-    <View className="w-3/4">
+    <View className="w-11/12">
       {renderLabel()}
       <View>
         <TextInput

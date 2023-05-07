@@ -8,9 +8,9 @@ import Login from "./screens/auth/Login";
 import SignUp from "./screens/auth/SignUp";
 import Marketplace from "./screens/explore/Marketplace";
 import Profile from "./screens/profile/Profile";
-import Settings from "./screens/Settings";
 import Categories from "./screens/explore/Categories";
 import DonationDetails from "./screens/explore/DonationDetails";
+import AddDonation from "./screens/add/AddDonation";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -50,6 +50,14 @@ const You = () => {
   );
 };
 
+const Add = () => {
+  return (
+    <Stack.Navigator screenOptions={screenOptions}>
+      <Stack.Screen name="AddDonation" component={AddDonation} />
+    </Stack.Navigator>
+  );
+};
+
 const App = () => {
   return (
     <>
@@ -67,8 +75,8 @@ const App = () => {
                 iconName = focused ? "compass" : "compass-outline";
               } else if (rn === "You") {
                 iconName = focused ? "person" : "person-outline";
-              } else if (rn === "Settings") {
-                iconName = focused ? "settings" : "settings-outline";
+              } else if (rn === "Donate") {
+                iconName = focused ? "add-circle" : "add-circle-outline";
               }
 
               return <Ionicons name={iconName} size={size} color={color} />;
@@ -84,8 +92,8 @@ const App = () => {
         >
           <Tab.Screen name="Welcome" component={Auth}></Tab.Screen>
           <Tab.Screen name="Explore" component={Explore}></Tab.Screen>
+          <Tab.Screen name="Donate" component={Add}></Tab.Screen>
           <Tab.Screen name="You" component={You}></Tab.Screen>
-          <Tab.Screen name="Settings" component={Settings}></Tab.Screen>
         </Tab.Navigator>
       </NavigationContainer>
     </>

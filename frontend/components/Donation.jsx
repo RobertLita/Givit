@@ -2,7 +2,7 @@ import { View, Text, Image, TouchableOpacity } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import React, { useState } from "react";
 import Badge from "./Badge";
-import { FontAwesome } from "@expo/vector-icons";
+import { MaterialIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 
 const stars = {
@@ -61,19 +61,19 @@ const Donation = ({
             />
           )}
         </View>
-        <View className="justify-center items-center" style={{ flex: 3 }}>
-          <Text className="text-xl ml-2">{name}</Text>
+        <View className="justify-center" style={{ flex: 3 }}>
+          <Text className="text-xl ml-4">{name}</Text>
         </View>
-        <View style={{ flex: 4 }} className="justify-evenly ml-3">
+        <View style={{ flex: 4 }} className="justify-evenly ml-4">
           <View>
             <View className="flex-row items-center">
               {stars[condition].map((star, index) => {
                 if (star === 1) {
                   // full star
                   return (
-                    <FontAwesome
+                    <MaterialIcons
                       name="star"
-                      size={24}
+                      size={30}
                       color="#F9AC67"
                       key={index}
                     />
@@ -81,9 +81,9 @@ const Donation = ({
                 } else if (star === 0.5) {
                   // half star
                   return (
-                    <FontAwesome
-                      name="star-half-empty"
-                      size={24}
+                    <MaterialIcons
+                      name="star-half"
+                      size={30}
                       color="#F9AC67"
                       key={index}
                     />
@@ -91,9 +91,9 @@ const Donation = ({
                 } else {
                   // empty star
                   return (
-                    <FontAwesome
-                      name="star-o"
-                      size={24}
+                    <MaterialIcons
+                      name="star-outline"
+                      size={30}
                       color="#F9AC67"
                       key={index}
                     />
@@ -101,10 +101,10 @@ const Donation = ({
                 }
               })}
             </View>
-            <Text className="text-gray-700 ml-3">({condition})</Text>
+            <Text className="text-gray-500 ml-3">({condition})</Text>
           </View>
 
-          <Text>Donated by: {username}</Text>
+          <Text>Status {status}</Text>
         </View>
         <View className="justify-center items-center" style={{ flex: 1 }}>
           <Text className="text-gray-700">{date}</Text>
