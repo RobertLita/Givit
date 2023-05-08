@@ -25,20 +25,36 @@ const SignUp = () => {
 
   return (
     <SafeAreaView style={{ flex: 1 }} className="bg-white">
-      <Text className="font-bold text-3xl text-black ml-4" style={{ flex: 1 }}>
-        Sign up
-      </Text>
-      <View style={{ flex: 4 }} className="w-full items-center justify-evenly">
-        <Input label="Username*" value={username} setValue={setUsername} />
-        <Input label="Email*" value={email} setValue={setEmail} email />
-        <Input
-          label="Password*"
-          secureTextEntry
-          value={password}
-          setValue={setPassword}
-          password
-          className="mx-2"
-        />
+      <View style={{ flex: 1 }}>
+        <Text className="font-bold text-3xl text-black ml-4">Sign up</Text>
+        <Text className="text-lg font-bold ml-4 mt-2 text-gray-400">
+          Please sign up to continue.
+        </Text>
+      </View>
+      <View style={{ flex: 4 }} className="w-full items-center justify-center">
+        <View className="w-10/12 h-full justify-evenly">
+          <Input
+            label="Username*"
+            value={username}
+            setValue={setUsername}
+            style={{ width: "100%" }}
+          />
+          <Input
+            label="Email*"
+            value={email}
+            setValue={setEmail}
+            email
+            style={{ width: "100%" }}
+          />
+          <Input
+            label="Password*"
+            secureTextEntry
+            value={password}
+            setValue={setPassword}
+            password
+            style={{ width: "100%" }}
+          />
+        </View>
       </View>
       <View style={{ flex: 2 }} className="w-full items-center justify-center">
         <TouchableOpacity

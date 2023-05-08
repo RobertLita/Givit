@@ -11,6 +11,7 @@ import Profile from "./screens/profile/Profile";
 import Categories from "./screens/explore/Categories";
 import DonationDetails from "./screens/explore/DonationDetails";
 import AddDonation from "./screens/add/AddDonation";
+import CameraView from "./screens/add/CameraView";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -54,6 +55,7 @@ const Add = () => {
   return (
     <Stack.Navigator screenOptions={screenOptions}>
       <Stack.Screen name="AddDonation" component={AddDonation} />
+      <Stack.Screen name="CameraView" component={CameraView} />
     </Stack.Navigator>
   );
 };

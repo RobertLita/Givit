@@ -30,17 +30,18 @@ const Login = () => {
           Please sign in to continue.
         </Text>
       </View>
-
-      <View style={{ flex: 2 }} className="w-full items-center justify-evenly">
-        <Input label="Email*" value={email} setValue={setEmail} email />
-        <Input
-          label="Password*"
-          secureTextEntry
-          value={password}
-          setValue={setPassword}
-          password
-          className="mx-2"
-        />
+      <View className="w-full items-center justify-center" style={{ flex: 2 }}>
+        <View className="w-10/12 h-full justify-evenly">
+          <Input label="Email*" value={email} setValue={setEmail} email />
+          <Input
+            label="Password*"
+            secureTextEntry
+            value={password}
+            setValue={setPassword}
+            password
+            style={{ width: "100%" }}
+          />
+        </View>
       </View>
       <View style={{ flex: 2 }} className="w-full items-center justify-center">
         <TouchableOpacity

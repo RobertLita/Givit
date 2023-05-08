@@ -10,7 +10,10 @@ const Input = ({
   label,
   error,
   email,
+  multiline,
+  numberOfLines,
   password,
+  rest,
 }) => {
   const [secure, setSecure] = useState(secureTextEntry);
   const [isFocused, setIsFocused] = useState(false);
@@ -24,13 +27,15 @@ const Input = ({
   };
 
   return (
-    <View className="w-11/12">
+    <View {...rest}>
       {renderLabel()}
       <View>
         <TextInput
           value={value}
           onChangeText={setValue}
-          className="rounded border-gray-600 px-2 h-10"
+          className="rounded border-gray-600 px-2 h-10 text-base py-2"
+          multiline={multiline}
+          numberOfLines={numberOfLines}
           keyboardType={inputType}
           autoComplete="off"
           autoCapitalize="none"
@@ -38,8 +43,13 @@ const Input = ({
           secureTextEntry={secure}
           placeholder={placeholder}
           cursorColor="black"
+          selectionColor={"black"}
           style={[
             { borderWidth: 1 },
+            multiline && {
+              height: 100,
+              textAlignVertical: "top",
+            },
             isFocused && {
               borderColor: "#F9AC67",
               borderWidth: 2,
