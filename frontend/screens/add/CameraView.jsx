@@ -9,8 +9,10 @@ import {
   View,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
 
 const CameraView = () => {
+  const navigation = useNavigation();
   const [image, setImage] = useState(null);
   const [type, setType] = useState(CameraType.back);
   const [flash, setFlash] = useState(Camera.Constants.FlashMode.off);
@@ -45,7 +47,7 @@ const CameraView = () => {
     if (cameraRef) {
       try {
         const dataImage = await cameraRef.current.takePictureAsync();
-        console.log(dataImage);
+        // console.log(dataImage);
         setImage(dataImage.uri);
       } catch (e) {
         console.log(e);
@@ -63,7 +65,10 @@ const CameraView = () => {
             className="relative"
           />
           <View className="absolute h-20 w-full bg-trasparent bottom-4 items-center flex-row justify-between px-6">
-            <TouchableOpacity onPress={takePicture} className="items-center">
+            <TouchableOpacity
+              onPress={() => navigation.navigate("AddDonation", { uri: image })}
+              className="items-center"
+            >
               <Ionicons name="checkmark" size={30} color="honeydew" />
               <Text className="text-lg text-white">Add Image</Text>
             </TouchableOpacity>

@@ -5,17 +5,29 @@ import {
   ScrollView,
   TouchableOpacity,
   StyleSheet,
+  Image,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import Input from "../../components/Input";
 import { Picker } from "@react-native-picker/picker";
+import { useRoute } from "@react-navigation/native";
+import { Feather } from "@expo/vector-icons";
 
 const AddDonation = () => {
   const navigation = useNavigation();
   const [imageArray, setImageArray] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState();
   const [selectedCondition, setSelectedCondition] = useState();
+  const route = useRoute();
+
+  useEffect(() => {
+    const params = route.params;
+    if (params !== undefined && !imageArray.includes(params.uri)) {
+      setImageArray((imageArray) => [...imageArray, params.uri]);
+    }
+  }, [route]);
+
   return (
     <SafeAreaView style={{ flex: 1 }} className="bg-white">
       <Text className="font-bold text-3xl text-black ml-4 mb-6">
@@ -28,24 +40,36 @@ const AddDonation = () => {
           justifyContent: "center",
         }}
       >
-        <View className="w-11/12 justify-around h-64">
+        <View className="w-11/12 justify-around">
           <Text className="text-lg">Images</Text>
-          <View className="flex-wrap flex-row items-center gap-x-2 gap-y-2">
-            <TouchableOpacity
-              className="border border-gray-500 w-24 h-24 justify-center items-center border-dashed"
-              onPress={() => navigation.navigate("CameraView")}
-            >
-              <Text className="text-base text-gray-400">+ Add an image</Text>
-            </TouchableOpacity>
-            <TouchableOpacity className="border border-gray-500 w-24 h-24 justify-center items-center border-dashed">
-              <Text className="text-base text-gray-400">+ Add an image</Text>
-            </TouchableOpacity>
-            <TouchableOpacity className="border border-gray-500 w-24 h-24 justify-center items-center border-dashed">
-              <Text className="text-base text-gray-400">+ Add an image</Text>
-            </TouchableOpacity>
-            <TouchableOpacity className="border border-gray-500 w-24 h-24 justify-center items-center border-dashed">
-              <Text className="text-base text-gray-400">+ Add an image</Text>
-            </TouchableOpacity>
+          <View className="flex-wrap flex-row items-center gap-x-2 gap-y-2 mt-2">
+            {imageArray.map((image, index) => (
+              <View
+                key={index}
+                className="border border-gray-500 w-24 h-24 justify-center items-center border-dashed relative"
+              >
+                <Image source={{ uri: image }} className="w-full h-full" />
+                <Feather
+                  name="x"
+                  size={20}
+                  color="red"
+                  style={{ position: "absolute", top: 2, right: 2 }}
+                  onPress={() =>
+                    setImageArray((imageArray) =>
+                      imageArray.filter((item) => item !== image)
+                    )
+                  }
+                />
+              </View>
+            ))}
+            {imageArray.length !== 6 && (
+              <TouchableOpacity
+                className="border border-gray-500 w-24 h-24 justify-center items-center border-dashed"
+                onPress={() => navigation.navigate("CameraView")}
+              >
+                <Text className="text-base text-gray-400">+ Add an image</Text>
+              </TouchableOpacity>
+            )}
           </View>
         </View>
         <View className="w-11/12">
