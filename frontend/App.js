@@ -12,6 +12,9 @@ import Categories from "./screens/explore/Categories";
 import DonationDetails from "./screens/explore/DonationDetails";
 import AddDonation from "./screens/add/AddDonation";
 import CameraView from "./screens/add/CameraView";
+import UserRewards from "./screens/profile/UserRewards";
+import UserReviews from "./screens/profile/UserReviews";
+import UserDonations from "./screens/profile/UserDonations";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -47,6 +50,9 @@ const You = () => {
   return (
     <Stack.Navigator screenOptions={screenOptions}>
       <Stack.Screen name="Profile" component={Profile} />
+      <Stack.Screen name="UserRewards" component={UserRewards} />
+      <Stack.Screen name="UserReviews" component={UserReviews} />
+      <Stack.Screen name="UserDonations" component={UserDonations} />
     </Stack.Navigator>
   );
 };

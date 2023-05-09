@@ -51,8 +51,20 @@ const DonationDetails = () => {
         <View className="h-72">
           <Carousel images={illustrations} />
         </View>
-        <View className="mt-8 w-full bg-gray-100 rounded-2xl justify-evenly mb-12 h-96">
-          <Text className="text-2xl ml-3">{name}</Text>
+        <View className="mt-8 w-full bg-gray-100 rounded-2xl justify-evenly mb-12 h-[420] relative">
+          <MaterialIcons
+            name="delete"
+            size={30}
+            color="slategray"
+            style={{ position: "absolute", top: 10, right: 10 }}
+          />
+          <MaterialIcons
+            name="edit"
+            size={30}
+            color="slategray"
+            style={{ position: "absolute", top: 10, right: 65 }}
+          />
+          <Text className="text-2xl ml-3 mt-3">{name}</Text>
           <View className="items-center w-full">
             <Badge label={category} />
           </View>

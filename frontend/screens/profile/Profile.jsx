@@ -15,17 +15,17 @@ const Profile = () => {
     {
       name: "Donations",
       icon: "gift",
-      linkTo: null,
+      linkTo: "UserDonations",
     },
     {
       name: "Reviews",
       icon: "sticky-note-o",
-      linkTo: null,
+      linkTo: "UserReviews",
     },
     {
       name: "Rewards",
       icon: "trophy",
-      linkTo: null,
+      linkTo: "UserRewards",
     },
   ];
   // fetch details from current user

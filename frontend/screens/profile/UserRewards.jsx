@@ -1,11 +1,12 @@
-import { View, Text } from "react-native";
+import { View, Text, SafeAreaView } from "react-native";
 import React from "react";
 
 const UserRewards = () => {
   return (
-    <View>
-      <Text>UserRewards</Text>
-    </View>
+    <SafeAreaView
+      style={{ flex: 1 }}
+      className="bg-white items-center"
+    ></SafeAreaView>
   );
 };
 
