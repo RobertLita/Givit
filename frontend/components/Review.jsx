@@ -15,7 +15,7 @@ const Review = () => {
         <View className="bg-gray-400 w-20 h-20 mx-3 rounded-full items-center justify-center" />
         <View className="bg-gray-300 w-12 h-6 items-center justify-around rounded-md flex-row mr-5">
           <FontAwesome name="star" size={16} color="black" />
-          <Text className="text-md">{rating}</Text>
+          <Text>{rating}</Text>
         </View>
       </View>
       <Text className="text-base mx-4 mt-6">{message}</Text>
