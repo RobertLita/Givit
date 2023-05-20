@@ -16,25 +16,25 @@ const Profile = () => {
       name: "Donations",
       icon: "gift",
       linkTo: "UserDonations",
+      count: 10,
     },
     {
       name: "Reviews",
       icon: "sticky-note-o",
       linkTo: "UserReviews",
+      count: 14,
     },
     {
       name: "Rewards",
       icon: "trophy",
       linkTo: "UserRewards",
+      count: 3,
     },
   ];
   // fetch details from current user
   const username = "lita.robert";
   const type = "donor";
-  const donationCount = 10;
   const rating = 4.7;
-  const reviewCount = 14;
-  const rewards = [];
 
   return (
     <SafeAreaView style={{ flex: 1 }} className="bg-white">
@@ -65,6 +65,7 @@ const Profile = () => {
             title={item.name}
             iconName={item.icon}
             linkTo={item.linkTo}
+            count={item.count}
           />
         ))}
       </View>

@@ -37,7 +37,10 @@ const Donation = ({
         style={{ width: "40%", height: "100%" }}
       />
       <View style={{ flex: 1 }}>
-        <View className="flex-row justify-between mt-3" style={{ flex: 1 }}>
+        <View
+          className="flex-row justify-between mt-3 items-center"
+          style={{ flex: 1 }}
+        >
           <Badge label={category} />
           {!fav ? (
             <AntDesign
@@ -61,10 +64,10 @@ const Donation = ({
             />
           )}
         </View>
-        <View className="justify-center" style={{ flex: 3 }}>
+        <View className="justify-center " style={{ flex: 2 }}>
           <Text className="text-xl ml-4">{name}</Text>
         </View>
-        <View style={{ flex: 4 }} className="justify-evenly ml-4">
+        <View style={{ flex: 2 }} className="justify-evenly ml-4">
           <View>
             <View className="flex-row items-center">
               {stars[condition].map((star, index) => {
@@ -101,12 +104,13 @@ const Donation = ({
                 }
               })}
             </View>
-            <Text className="text-gray-500 ml-3">({condition})</Text>
+            <Text className="text-gray-500">({condition})</Text>
           </View>
-
-          <Text>Status {status}</Text>
         </View>
-        <View className="justify-center items-center" style={{ flex: 1 }}>
+        <View className="justify-evenly items-center" style={{ flex: 3 }}>
+          <View className="py-1 px-1 border justify-center items-center rounded-lg border-gray-500 w-2/3">
+            <Text>{status}</Text>
+          </View>
           <Text className="text-gray-700">{date}</Text>
         </View>
       </View>

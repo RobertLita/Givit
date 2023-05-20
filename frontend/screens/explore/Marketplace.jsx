@@ -72,7 +72,7 @@ const Marketplace = () => {
             condition="ACCEPTABLE"
             username="robert"
             date="2023-05-04"
-            className="bg-gray-100 h-60 my-2 rounded-md border border-gray-300 flex-row w-11/12"
+            className="bg-gray-100 h-64 my-2 rounded-md border border-gray-300 flex-row w-11/12"
           />
         )}
         ListHeaderComponent={MarketplaceHeader}
