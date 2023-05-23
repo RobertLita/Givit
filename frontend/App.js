@@ -15,6 +15,7 @@ import CameraView from "./screens/add/CameraView";
 import UserRewards from "./screens/profile/UserRewards";
 import UserReviews from "./screens/profile/UserReviews";
 import UserDonations from "./screens/profile/UserDonations";
+import { AuthProvider, useAuth } from "./context/AuthContext";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -66,11 +67,13 @@ const Add = () => {
   );
 };
 
-const App = () => {
+const Routes = () => {
+  const { authState } = useAuth();
+  console.log(authState.authenticated);
+
   return (
-    <>
-      <StatusBar />
-      <NavigationContainer>
+    <NavigationContainer>
+      {authState.authenticated ? (
         <Tab.Navigator
           screenOptions={({ route }) => ({
             tabBarIcon: ({ focused, color, size }) => {
@@ -98,13 +101,23 @@ const App = () => {
             headerShown: false,
           })}
         >
-          <Tab.Screen name="Welcome" component={Auth}></Tab.Screen>
+          {/* <Tab.Screen name="Welcome" component={Auth}></Tab.Screen> */}
           <Tab.Screen name="Explore" component={Explore}></Tab.Screen>
           <Tab.Screen name="Donate" component={Add}></Tab.Screen>
           <Tab.Screen name="You" component={You}></Tab.Screen>
         </Tab.Navigator>
-      </NavigationContainer>
-    </>
+      ) : (
+        <Auth />
+      )}
+    </NavigationContainer>
+  );
+};
+
+const App = () => {
+  return (
+    <AuthProvider>
+      <Routes />
+    </AuthProvider>
   );
 };
 
