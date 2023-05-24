@@ -4,35 +4,35 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 
 const Input = ({
   value,
-  setValue,
+  name,
+  error,
   placeholder,
   secureTextEntry,
   label,
-  error,
   email,
   multiline,
   numberOfLines,
   password,
+  handleChange,
+  handleBlur,
   rest,
 }) => {
   const [secure, setSecure] = useState(secureTextEntry);
   const [isFocused, setIsFocused] = useState(false);
   const inputType = email ? "email-address" : "default";
-
-  const renderLabel = () => {
-    if (label === undefined) return <></>;
-    if (error)
-      return <Text className="text-red-600 text-lg mb-1">{label}</Text>;
-    return <Text className="text-gray-400 text-lg mb-1">{label}</Text>;
+  const handleInputBlur = (event) => {
+    event.persist(); // Persist the synthetic event
+    handleBlur(event);
+    setIsFocused(false);
   };
 
   return (
-    <View {...rest}>
-      {renderLabel()}
+    <View {...rest} className="relative">
+      <Text className="text-gray-400 text-lg mb-1">{label}</Text>
       <View>
         <TextInput
+          name={name}
           value={value}
-          onChangeText={setValue}
           className="rounded border-gray-600 px-2 h-10 text-base py-2"
           multiline={multiline}
           numberOfLines={numberOfLines}
@@ -44,6 +44,7 @@ const Input = ({
           placeholder={placeholder}
           cursorColor="black"
           selectionColor={"black"}
+          onChangeText={handleChange}
           style={[
             { borderWidth: 1 },
             multiline && {
@@ -58,7 +59,7 @@ const Input = ({
             },
           ]}
           onFocus={() => setIsFocused(true)}
-          onBlur={() => setIsFocused(false)}
+          onBlur={handleInputBlur}
         />
         {password && (
           <TouchableOpacity
@@ -73,6 +74,15 @@ const Input = ({
           </TouchableOpacity>
         )}
       </View>
+      <Text
+        className="text-red-400 absolute"
+        style={{
+          bottom: -20,
+          fontSize: 12,
+        }}
+      >
+        {error}
+      </Text>
     </View>
   );
 };

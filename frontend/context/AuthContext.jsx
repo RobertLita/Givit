@@ -45,9 +45,9 @@ export const AuthProvider = ({ children }) => {
           headers: { "Content-Type": "application/json" },
         }
       );
+      return { data: "success", status: response.status };
     } catch (e) {
-      console.log(e);
-      // return { error: true, message: e.response.data.msg };
+      return { data: e.response.data.detail, status: e.response.status };
     }
   };
 
@@ -73,9 +73,9 @@ export const AuthProvider = ({ children }) => {
 
       await SecureStore.setItemAsync(TOKEN_KEY, response.data.access_token);
 
-      return response;
+      return { data: "success", status: response.status };
     } catch (e) {
-      console.log(e);
+      return { data: e.response.data.detail, status: e.response.status };
     }
   };
 

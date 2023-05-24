@@ -5,45 +5,63 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from "react-native";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { FontAwesome } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
 import ProfileItem from "../../components/ProfileItem";
+import { useAuth } from "../../context/AuthContext";
+import axios from "axios";
 
 const Profile = () => {
+  const { logout } = useAuth();
+  const [userDetails, setUserDetails] = useState({});
+
   const settingsItems = [
     {
       name: "Donations",
       icon: "gift",
       linkTo: "UserDonations",
-      count: 10,
+      count: userDetails.donationCount,
     },
     {
       name: "Reviews",
       icon: "sticky-note-o",
       linkTo: "UserReviews",
-      count: 14,
+      count: userDetails.reviewCount,
     },
     {
       name: "Rewards",
       icon: "trophy",
       linkTo: "UserRewards",
-      count: 3,
+      count: userDetails.reviewCount,
     },
   ];
-  // fetch details from current user
-  const username = "lita.robert";
-  const type = "donor";
-  const rating = 4.7;
+  const onSignOut = async () => {
+    return await logout();
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get("http://10.0.2.2:8000/users/me");
+        setUserDetails(response.data);
+      } catch (e) {
+        console.log(e);
+      }
+    };
+    fetchData();
+  }, []);
 
   return (
     <SafeAreaView style={{ flex: 1 }} className="bg-white">
       <View className="justify-between w-screen items-center flex-row">
-        <View className="justify-center items-center">
-          <Text className="font-bold text-3xl text-black ml-3">{username}</Text>
+        <View className="justify-center items-center ml-4">
+          <Text className="font-bold text-3xl text-black ">
+            {userDetails.username}
+          </Text>
           <View className="bg-gray-300 w-12 h-6 items-center justify-around rounded-md flex-row">
             <FontAwesome name="star" size={16} color="black" />
-            <Text className="text-md">{rating}</Text>
+            <Text className="text-md">{userDetails.rating}</Text>
           </View>
         </View>
         <View className="bg-gray-400 w-20 h-20 mx-3 rounded-full items-center justify-center" />
@@ -74,7 +92,7 @@ const Profile = () => {
         <TouchableOpacity
           className="px-12 py-3 bg-red-400 rounded-md flex-row w-1/2"
           style={styles.shadow}
-          // onPress={() => navigation.navigate("Sign up")}
+          onPress={() => onSignOut()}
         >
           <MaterialIcons
             name="exit-to-app"
