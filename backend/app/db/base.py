@@ -4,3 +4,4 @@ from app.models.review import Review
 from app.models.reward import Reward
 from app.models.reward_allocation import RewardAllocation
 from app.models.user import User
+from app.models.image import Image

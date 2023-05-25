@@ -5,26 +5,19 @@ from ....crud import crud_objects
 from app.schemas.object import ObjectCreate, Object
 from app.schemas.user import UserDetail
 from app.crud.crud_users import increment_donation
+from app.schemas.enums.object_category import ObjectCategory
 
 router = APIRouter()
-
-
-@router.get("/", response_model=list[Object])
-async def read_objects(
-    skip: int = 0, limit: int = 10, db: Session = Depends(deps.get_db)
-):
-    objects = crud_objects.get_objects(db, skip, limit)
-    return objects
 
 
 @router.post("/", response_model=Object)
 async def create_object(object: ObjectCreate, db: Session = Depends(deps.get_db)):
     if (
-        object.description is None
-        or object.name is None
-        or object.condition is None
-        or object.category is None
-        or object.status is None
+            object.description is None
+            or object.name is None
+            or object.condition is None
+            or object.category is None
+            or object.status is None
     ):
         raise HTTPException(
             status_code=400, detail="Object has one or more empty fields"
@@ -84,7 +77,7 @@ async def get_organization(object_id: int, db: Session = Depends(deps.get_db)):
 
 @router.patch("/{object_id}", response_model=Object)
 async def update_object(
-    object_id: int, object: Object, db: Session = Depends(deps.get_db)
+        object_id: int, object: Object, db: Session = Depends(deps.get_db)
 ):
     db_object = crud_objects.get_object(db, object_id)
     if db_object is None:

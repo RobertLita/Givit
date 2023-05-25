@@ -12,7 +12,6 @@ class ObjectBase(BaseModel):
     status: ObjectStatus = ObjectStatus.available
     donorId: int
     organizationId: int | None = None
-    # TODO images
 
     @validator("description")
     def check_description(cls, description):

@@ -1,10 +1,16 @@
 from sqlalchemy.orm import Session
 from app.schemas.object import ObjectCreate
 from app.models.object import Object
+from app.schemas.enums.object_status import ObjectStatus
+from app.schemas.enums.object_category import ObjectCategory
 
 
-def get_objects(db: Session, skip: int = 0, limit: int = 100) -> [Object]:
-    return db.query(Object).offset(skip).limit(limit).all()
+def get_marketplace(db: Session, skip: int = 0, limit: int = 25) -> [Object]:
+    return db.query(Object).filter(Object.status == ObjectStatus.available).offset(skip).limit(limit).all()
+
+
+def get_marketplace_filtered(db: Session, category: ObjectCategory, skip: int = 0, limit: int = 25) -> [Object]:
+    return db.query(Object).filter(Object.category == category).offset(skip).limit(limit).all()
 
 
 def get_object(db: Session, object_id: int) -> Object:

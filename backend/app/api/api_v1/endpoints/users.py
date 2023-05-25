@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, Body
+from fastapi import APIRouter, Depends, HTTPException, Body, Response, UploadFile
 from app.api import deps
 from sqlalchemy.orm import Session
 from ....crud import crud_users
@@ -7,6 +7,13 @@ from app.schemas.reward import Reward
 from app.models.user import User as UserModel
 from pydantic.networks import EmailStr
 from fastapi.encoders import jsonable_encoder
+from app.s3.file_operations import s3_download, s3_upload
+import magic
+
+SUPPORTED_FILE_TYPES = {
+    'image/png': 'png',
+    'image/jpeg': 'jpg',
+}
 
 router = APIRouter()
 
@@ -39,6 +46,54 @@ async def read_user_me(
     current_user: UserModel = Depends(deps.get_current_active_user),
 ):
     return current_user
+
+
+@router.get("/profilepicture")
+async def download_picture(
+    current_user: UserModel = Depends(deps.get_current_active_user),
+):
+    url = current_user.profile_url
+    try:
+        file = url.split("/")[1]
+        content = await s3_download(key=file, bucket_name="gusers")
+        return Response(
+            content=content,
+            headers={
+                "Content-Disposition": f"attachment;filename={file}",
+                "Content-Type": "application/octet-stream",
+            },
+        )
+    except Exception as e:
+        print(e)
+
+
+@router.post("/profilepicture")
+async def upload_picture(
+    current_user: UserModel = Depends(deps.get_current_active_user),
+    db: Session = Depends(deps.get_db),
+    file: UploadFile | None = None,
+):
+    if not file:
+        raise HTTPException(status_code=400, detail="No file found")
+    content = await file.read()
+    size = len(content)
+
+    if not 0 < size <= 1 * (1024 * 1024):
+        raise HTTPException(
+            status_code=400,
+            detail='Supported file size < 1MB'
+        )
+    file_type = magic.from_buffer(buffer=content, mime=True)
+    if file_type not in SUPPORTED_FILE_TYPES:
+        raise HTTPException(
+            status_code=400,
+            detail=f'Unsupported file type: {file_type}. Supported types are {SUPPORTED_FILE_TYPES}'
+        )
+    file_name = f'{current_user.username}.{SUPPORTED_FILE_TYPES[file_type]}'
+    await s3_upload(contents=content, key=file_name, bucket_name="gusers")
+    crud_users.add_profile_picture(db, current_user.id, f"gusers/{file_name}")
+
+    return {'file_name': file_name}
 
 
 @router.get("/{user_id}", response_model=User)

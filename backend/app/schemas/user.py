@@ -33,6 +33,8 @@ class User(UserBase):
     is_superuser: bool = False
     donationCount: int = 0
     reviewCount: int = 0
+    rewardCount: int = 0
+    profile_url: str = ""
     rewards: list[RewardAllocation] = []
     donations: list[Object] = []
     reviews: list[Review] = []

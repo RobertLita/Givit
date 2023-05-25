@@ -15,6 +15,8 @@ class User(Base):
     rating = Column(Float, default=0.0)
     reviewCount = Column(Integer, default=0)
     donationCount = Column(Integer, default=0)
+    rewardCount = Column(Integer, default=0)
+    profile_url = Column(String, default="gusers/default.jpg")
     is_active = Column(Boolean(), default=True)
     is_superuser = Column(Boolean(), default=False)
 

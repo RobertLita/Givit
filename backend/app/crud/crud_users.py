@@ -51,6 +51,20 @@ def increment_donation(db: Session, user_id: int) -> User:
     return db_user
 
 
+def increment_rewards(db: Session, user_id: int) -> User:
+    db_user = get_user(db, user_id)
+    setattr(db_user, "rewardCount", db_user.rewardCount + 1)
+    db.commit()
+    return db_user
+
+
+def add_profile_picture(db: Session, user_id: int, url: str) -> User:
+    db_user = get_user(db, user_id)
+    setattr(db_user, "profile_url", url)
+    db.commit()
+    return db_user
+
+
 def add_review_to_user(db: Session, user_id: int, rating_amount: int) -> User:
     db_user = get_user(db, user_id)
     new_rating = round(

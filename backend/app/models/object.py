@@ -6,9 +6,6 @@ from app.schemas.enums.object_condition import ObjectCondition
 from app.db.base_class import Base
 
 
-# TODO cascade or other constraints
-
-
 class Object(Base):
     __tablename__ = "object"
 
@@ -25,4 +22,4 @@ class Object(Base):
     organization = relationship(
         "User", foreign_keys=[organizationId], back_populates="donations"
     )
-    # TODO images
+    images = relationship("Image", back_populates="object", foreign_keys="[Image.objectId]")
