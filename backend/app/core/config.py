@@ -13,6 +13,7 @@ class Settings(BaseSettings):
     DATABASE_ALEMBIC_URL: str
     AWS_SECRET_ACCESS_KEY: str
     AWS_ACCESS_KEY_ID: str
+    AWS_REGION: str
     SECRET_KEY: str = secrets.token_urlsafe(32)
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 8
 

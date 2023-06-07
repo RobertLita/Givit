@@ -8,28 +8,37 @@ import {
   Image,
 } from "react-native";
 import React, { useEffect, useState } from "react";
-import { useNavigation } from "@react-navigation/native";
 import Input from "../../components/Input";
+import ModalImage from "../../components/ModalImage";
 import { Picker } from "@react-native-picker/picker";
 import { useRoute } from "@react-navigation/native";
 import { Feather } from "@expo/vector-icons";
 
 const AddDonation = () => {
-  const navigation = useNavigation();
   const [imageArray, setImageArray] = useState([]);
+  const [modalVisible, setModalVisible] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState();
   const [selectedCondition, setSelectedCondition] = useState();
   const route = useRoute();
 
   useEffect(() => {
     const params = route.params;
-    if (params !== undefined && !imageArray.includes(params.uri)) {
+    if (
+      params !== undefined &&
+      !imageArray.includes(params.uri) &&
+      params.uri !== null
+    ) {
       setImageArray((imageArray) => [...imageArray, params.uri]);
     }
   }, [route]);
 
   return (
     <SafeAreaView style={{ flex: 1 }} className="bg-white">
+      <ModalImage
+        modalVisible={modalVisible}
+        setModalVisible={setModalVisible}
+        basePage="AddDonation"
+      />
       <Text className="font-bold text-3xl text-black ml-4 mb-6">
         New donation
       </Text>
@@ -65,7 +74,7 @@ const AddDonation = () => {
             {imageArray.length !== 6 && (
               <TouchableOpacity
                 className="border border-gray-500 w-24 h-24 justify-center items-center border-dashed"
-                onPress={() => navigation.navigate("CameraView")}
+                onPress={() => setModalVisible(!modalVisible)}
               >
                 <Text className="text-base text-gray-400">+ Add an image</Text>
               </TouchableOpacity>
@@ -73,15 +82,14 @@ const AddDonation = () => {
           </View>
         </View>
         <View className="w-11/12">
-          <Text className="text-lg mb-2">Title</Text>
-          <Input placeholder={"Your object title"} />
+          <Input placeholder={"Your object title"} label="Title" />
         </View>
         <View className="w-11/12">
-          <Text className="text-lg mb-2">Description</Text>
           <Input
             multiline={true}
             numberOfLines={4}
             placeholder={"Your object description"}
+            label="Description"
             style={{ width: "100%" }}
           />
         </View>

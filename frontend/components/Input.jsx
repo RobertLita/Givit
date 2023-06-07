@@ -22,13 +22,13 @@ const Input = ({
   const inputType = email ? "email-address" : "default";
   const handleInputBlur = (event) => {
     event.persist(); // Persist the synthetic event
-    handleBlur(event);
+    if (handleBlur !== undefined) handleBlur(event);
     setIsFocused(false);
   };
 
   return (
     <View {...rest} className="relative">
-      <Text className="text-gray-400 text-lg mb-1">{label}</Text>
+      <Text className="text-gray-700 text-lg mb-1">{label}</Text>
       <View>
         <TextInput
           name={name}

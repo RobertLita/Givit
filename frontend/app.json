@@ -33,6 +33,12 @@
         {
           "cameraPermission": "Allow Givit to access your camera."
         }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "The app accesses your photos make awsome donations."
+        }
       ]
     ]
   }

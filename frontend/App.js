@@ -16,6 +16,7 @@ import UserRewards from "./screens/profile/UserRewards";
 import UserReviews from "./screens/profile/UserReviews";
 import UserDonations from "./screens/profile/UserDonations";
 import { AuthProvider, useAuth } from "./context/AuthContext";
+import ImageGallery from "./screens/add/ImageGallery";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -54,6 +55,8 @@ const You = () => {
       <Stack.Screen name="UserRewards" component={UserRewards} />
       <Stack.Screen name="UserReviews" component={UserReviews} />
       <Stack.Screen name="UserDonations" component={UserDonations} />
+      <Stack.Screen name="CameraView" component={CameraView} />
+      <Stack.Screen name="ImageGallery" component={ImageGallery} />
     </Stack.Navigator>
   );
 };
@@ -63,6 +66,7 @@ const Add = () => {
     <Stack.Navigator screenOptions={screenOptions}>
       <Stack.Screen name="AddDonation" component={AddDonation} />
       <Stack.Screen name="CameraView" component={CameraView} />
+      <Stack.Screen name="ImageGallery" component={ImageGallery} />
     </Stack.Navigator>
   );
 };

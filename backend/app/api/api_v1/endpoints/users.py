@@ -9,6 +9,8 @@ from pydantic.networks import EmailStr
 from fastapi.encoders import jsonable_encoder
 from app.s3.file_operations import s3_download, s3_upload
 import magic
+from uuid import uuid4
+
 
 SUPPORTED_FILE_TYPES = {
     'image/png': 'png',
@@ -56,13 +58,7 @@ async def download_picture(
     try:
         file = url.split("/")[1]
         content = await s3_download(key=file, bucket_name="gusers")
-        return Response(
-            content=content,
-            headers={
-                "Content-Disposition": f"attachment;filename={file}",
-                "Content-Type": "application/octet-stream",
-            },
-        )
+        return content
     except Exception as e:
         print(e)
 
@@ -89,7 +85,7 @@ async def upload_picture(
             status_code=400,
             detail=f'Unsupported file type: {file_type}. Supported types are {SUPPORTED_FILE_TYPES}'
         )
-    file_name = f'{current_user.username}.{SUPPORTED_FILE_TYPES[file_type]}'
+    file_name = f'{uuid4()}.{SUPPORTED_FILE_TYPES[file_type]}'
     await s3_upload(contents=content, key=file_name, bucket_name="gusers")
     crud_users.add_profile_picture(db, current_user.id, f"gusers/{file_name}")
 

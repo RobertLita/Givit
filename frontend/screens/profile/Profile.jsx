@@ -3,6 +3,7 @@ import {
   Text,
   SafeAreaView,
   StyleSheet,
+  Image,
   TouchableOpacity,
 } from "react-native";
 import React, { useState, useEffect } from "react";
@@ -10,10 +11,15 @@ import { FontAwesome } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
 import ProfileItem from "../../components/ProfileItem";
 import { useAuth } from "../../context/AuthContext";
+import { useRoute } from "@react-navigation/native";
 import axios from "axios";
+import ModalImage from "../../components/ModalImage";
 
 const Profile = () => {
   const { logout } = useAuth();
+  const route = useRoute();
+  const [profileImage, setProfileImage] = useState(null);
+  const [modalVisible, setModalVisible] = useState(false);
   const [userDetails, setUserDetails] = useState({});
 
   const settingsItems = [
@@ -40,10 +46,40 @@ const Profile = () => {
     return await logout();
   };
 
+  const convertImageToBase64 = (imageUri) => {
+    return new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.open("GET", imageUri, true);
+      xhr.responseType = "blob";
+
+      xhr.onload = () => {
+        if (xhr.status === 200) {
+          const reader = new FileReader();
+          reader.onloadend = () => {
+            resolve(reader.result);
+          };
+          reader.readAsDataURL(xhr.response);
+        } else {
+          reject(new Error("Failed to load image"));
+        }
+      };
+
+      xhr.onerror = () => {
+        reject(new Error("Failed to load image"));
+      };
+
+      xhr.send();
+    });
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get("http://10.0.2.2:8000/users/me");
+        const image = await axios.get(
+          "http://10.0.2.2:8000/users/profilepicture"
+        );
+        setProfileImage(image.data);
         setUserDetails(response.data);
       } catch (e) {
         console.log(e);
@@ -52,8 +88,35 @@ const Profile = () => {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    const updatePhoto = async () => {
+      const params = route.params;
+      console.log(params);
+      if (params !== undefined && params.uri !== null) {
+        try {
+          const base64Image = await convertImageToBase64(params.uri);
+          const response = await axios.post(
+            "http://10.0.2.2:8000/users/profilepicture",
+            { file: base64Image },
+            { headers: { "Content-Type": "multipart/form-data" } }
+          );
+          console.log(response);
+        } catch (e) {
+          console.log(e.response);
+        }
+      }
+    };
+    updatePhoto();
+  }, [route]);
+
+  console.log(profileImage);
   return (
     <SafeAreaView style={{ flex: 1 }} className="bg-white">
+      <ModalImage
+        modalVisible={modalVisible}
+        setModalVisible={setModalVisible}
+        basePage="Profile"
+      />
       <View className="justify-between w-screen items-center flex-row">
         <View className="justify-center items-center ml-4">
           <Text className="font-bold text-3xl text-black ">
@@ -64,7 +127,12 @@ const Profile = () => {
             <Text className="text-md">{userDetails.rating}</Text>
           </View>
         </View>
-        <View className="bg-gray-400 w-20 h-20 mx-3 rounded-full items-center justify-center" />
+        <TouchableOpacity onPress={() => setModalVisible(!modalVisible)}>
+          <Image
+            className="w-20 h-20 mx-3 rounded-full items-center justify-center"
+            source={{ uri: profileImage }}
+          />
+        </TouchableOpacity>
       </View>
       <View className="items-center">
         <View

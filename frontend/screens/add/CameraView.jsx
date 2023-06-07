@@ -1,5 +1,4 @@
 import { Camera, CameraType } from "expo-camera";
-import * as MediaLibrary from "expo-media-library";
 import { useState, useEffect, useRef } from "react";
 import {
   Image,
@@ -21,7 +20,6 @@ const CameraView = () => {
 
   useEffect(() => {
     (async () => {
-      MediaLibrary.requestPermissionsAsync();
       requestPermission();
     })();
   }, []);
