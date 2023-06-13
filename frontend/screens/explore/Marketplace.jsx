@@ -1,60 +1,24 @@
 import { SafeAreaView, FlatList } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import MarketplaceHeader from "../../components/MarketplaceHeader";
 import Donation from "../../components/Donation";
-
-const DATA = [
-  {
-    id: "1",
-    title: "First Item",
-  },
-  {
-    id: "2",
-    title: "First Item",
-  },
-  {
-    id: "3",
-    title: "First Item",
-  },
-  {
-    id: "4",
-    title: "First Item",
-  },
-  {
-    id: "5",
-    title: "First Item",
-  },
-  {
-    id: "6",
-    title: "First Item",
-  },
-  {
-    id: "7",
-    title: "First Item",
-  },
-  {
-    id: "8",
-    title: "First Item",
-  },
-  {
-    id: "9",
-    title: "First Item",
-  },
-  {
-    id: "10",
-    title: "First Item",
-  },
-  {
-    id: "11",
-    title: "First Item",
-  },
-  {
-    id: "12",
-    title: "First Item",
-  },
-];
+import axios from "axios";
 
 const Marketplace = () => {
+  const [objects, setObjects] = useState({});
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          "http://10.0.2.2:8000/marketplace/?skip=0&limit=100"
+        );
+        setObjects(response.data);
+      } catch (e) {
+        console.log(e.request);
+      }
+    };
+    fetchData();
+  }, []);
   return (
     <SafeAreaView style={{ flex: 1 }} className="bg-white ">
       <FlatList
@@ -62,16 +26,17 @@ const Marketplace = () => {
         contentContainerStyle={{
           alignItems: "center",
         }}
-        data={DATA}
+        data={objects}
         renderItem={({ item, index }) => (
           <Donation
             key={index}
-            category="PERSONAL"
-            name="Jucarie de plus"
-            status="AVAILABLE"
-            condition="ACCEPTABLE"
-            username="robert"
-            date="2023-05-04"
+            id={item.id}
+            category={item.category}
+            name={item.name}
+            status={item.status}
+            condition={item.condition}
+            image={item.image}
+            date={item.date}
             className="bg-gray-100 h-64 my-2 rounded-md border border-gray-300 flex-row w-11/12"
           />
         )}

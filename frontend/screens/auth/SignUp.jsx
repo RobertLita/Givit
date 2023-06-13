@@ -28,7 +28,7 @@ const registerSchema = yup.object().shape({
     .string()
     .min(6, "Password must have at least 6 characters")
     .max(15, "Password must have at most 15 characters")
-    .matches(/^(?=.*[a-z])/, "Must contain at least one lowercase character")
+    .matches(/^(?=.*[a-z])/, "Must contain at least one lowercase l")
     .matches(/^(?=.*[A-Z])/, "Must contain at least one uppercase character")
     .required("Password is required"),
   cpassword: yup

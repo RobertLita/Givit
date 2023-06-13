@@ -9,7 +9,7 @@ import React, { useState, useEffect } from "react";
 
 const { width, height } = Dimensions.get("window");
 
-const Carousel = ({ images }) => {
+const Carousel = ({ images, isStatic }) => {
   const [index, setIndex] = useState(0);
   const [activeIndex, setActiveIndex] = useState(0);
 
@@ -30,14 +30,23 @@ const Carousel = ({ images }) => {
         scrollEventThrottle={16}
         snapToAlignment="center"
         data={images}
-        keyExtractor={(item) => item.id.toString()}
-        renderItem={({ item }) => (
-          <Image
-            source={item.source}
-            resizeMode="contain"
-            style={{ width, height: height / 2, overflow: "visible" }}
-          />
-        )}
+        renderItem={({ item, index }) =>
+          isStatic ? (
+            <Image
+              key={index}
+              source={item.source}
+              resizeMode="contain"
+              style={{ width, height: height / 2, overflow: "visible" }}
+            />
+          ) : (
+            <Image
+              key={index}
+              source={{ uri: item }}
+              resizeMode="contain"
+              style={{ width, height: height / 2, overflow: "visible" }}
+            />
+          )
+        }
         onScroll={(event) => {
           const slideSize = event.nativeEvent.layoutMeasurement.width;
           const index = event.nativeEvent.contentOffset.x / slideSize;

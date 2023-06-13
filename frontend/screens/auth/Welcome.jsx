@@ -33,7 +33,7 @@ const Welcome = () => {
         </Text>
       </View>
       <View style={{ flex: 2 }} className="relative justify-center">
-        <Carousel images={illustrations} />
+        <Carousel images={illustrations} isStatic />
       </View>
 
       <View className="justify-center " style={{ flex: 2 }}>

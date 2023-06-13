@@ -6,6 +6,10 @@ class ImageBase(BaseModel):
     objectId: int
 
 
+class ImageCreate(ImageBase):
+    pass
+
+
 class Image(ImageBase):
     id: int
 

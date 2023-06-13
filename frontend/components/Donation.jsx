@@ -17,7 +17,6 @@ const Donation = ({
   status,
   condition,
   image,
-  username,
   category,
   id,
   date,
@@ -25,17 +24,13 @@ const Donation = ({
 }) => {
   const [fav, setFav] = useState(false);
   const navigation = useNavigation();
-
   return (
     <TouchableOpacity
       style={{ flex: 1 }}
       {...rest}
       onPress={() => navigation.navigate("DonationDetails", { id })}
     >
-      <Image
-        source={require("../images/welcome2.jpg")}
-        style={{ width: "40%", height: "100%" }}
-      />
+      <Image source={{ uri: image }} style={{ width: "40%", height: "100%" }} />
       <View style={{ flex: 1 }}>
         <View
           className="flex-row justify-between mt-3 items-center"

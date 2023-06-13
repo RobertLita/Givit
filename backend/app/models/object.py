@@ -15,6 +15,7 @@ class Object(Base):
     condition = Column(Enum(ObjectCondition), nullable=False)
     category = Column(Enum(ObjectCategory), nullable=False)
     status = Column(Enum(ObjectStatus), nullable=False, default=ObjectStatus.available)
+    date = Column(String)
     donorId = Column(Integer, ForeignKey("user.id"), nullable=False)
     organizationId = Column(Integer, ForeignKey("user.id"))
 

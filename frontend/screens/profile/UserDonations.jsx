@@ -1,7 +1,7 @@
 import { SafeAreaView, FlatList } from "react-native";
 import React from "react";
 import Donation from "../../components/Donation";
-import MyDonationsHeader from "../../components/MyDonationsHeader";
+import ListHeader from "../../components/ListHeader";
 
 const DATA = [
   {
@@ -75,7 +75,7 @@ const UserDonations = () => {
             className="bg-gray-100 h-64 my-2 rounded-md border border-gray-300 flex-row w-11/12"
           />
         )}
-        ListHeaderComponent={MyDonationsHeader}
+        ListHeaderComponent={<ListHeader title="My donations" />}
       />
     </SafeAreaView>
   );

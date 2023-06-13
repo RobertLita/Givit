@@ -46,32 +46,6 @@ const Profile = () => {
     return await logout();
   };
 
-  const convertImageToBase64 = (imageUri) => {
-    return new Promise((resolve, reject) => {
-      const xhr = new XMLHttpRequest();
-      xhr.open("GET", imageUri, true);
-      xhr.responseType = "blob";
-
-      xhr.onload = () => {
-        if (xhr.status === 200) {
-          const reader = new FileReader();
-          reader.onloadend = () => {
-            resolve(reader.result);
-          };
-          reader.readAsDataURL(xhr.response);
-        } else {
-          reject(new Error("Failed to load image"));
-        }
-      };
-
-      xhr.onerror = () => {
-        reject(new Error("Failed to load image"));
-      };
-
-      xhr.send();
-    });
-  };
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -91,16 +65,24 @@ const Profile = () => {
   useEffect(() => {
     const updatePhoto = async () => {
       const params = route.params;
-      console.log(params);
       if (params !== undefined && params.uri !== null) {
         try {
-          const base64Image = await convertImageToBase64(params.uri);
+          const formData = new FormData();
+          formData.append("file", {
+            uri: params.uri,
+            name: "photo.jpg",
+            type: "image/jpg",
+          });
           const response = await axios.post(
             "http://10.0.2.2:8000/users/profilepicture",
-            { file: base64Image },
-            { headers: { "Content-Type": "multipart/form-data" } }
+            formData,
+            {
+              headers: {
+                "Content-Type": "multipart/form-data",
+              },
+            }
           );
-          console.log(response);
+          if (response.status === 200) setProfileImage(params.uri);
         } catch (e) {
           console.log(e.response);
         }
@@ -109,7 +91,6 @@ const Profile = () => {
     updatePhoto();
   }, [route]);
 
-  console.log(profileImage);
   return (
     <SafeAreaView style={{ flex: 1 }} className="bg-white">
       <ModalImage

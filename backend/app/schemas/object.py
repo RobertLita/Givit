@@ -1,3 +1,5 @@
+import datetime
+
 from pydantic import BaseModel, validator
 from .enums.object_status import ObjectStatus
 from .enums.object_category import ObjectCategory
@@ -10,6 +12,7 @@ class ObjectBase(BaseModel):
     condition: ObjectCondition
     category: ObjectCategory
     status: ObjectStatus = ObjectStatus.available
+    date: datetime.date
     donorId: int
     organizationId: int | None = None
 

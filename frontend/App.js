@@ -15,8 +15,11 @@ import CameraView from "./screens/add/CameraView";
 import UserRewards from "./screens/profile/UserRewards";
 import UserReviews from "./screens/profile/UserReviews";
 import UserDonations from "./screens/profile/UserDonations";
+import Goals from "./screens/goals/Goals";
+import Chat from "./screens/chat/Chat";
 import { AuthProvider, useAuth } from "./context/AuthContext";
 import ImageGallery from "./screens/add/ImageGallery";
+import GoalDetails from "./screens/goals/GoalDetails";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -71,9 +74,26 @@ const Add = () => {
   );
 };
 
+const GoalsPage = () => {
+  return (
+    <Stack.Navigator screenOptions={screenOptions}>
+      <Stack.Screen name="GoalsPage" component={Goals} />
+      <Stack.Screen name="GoalDetails" component={GoalDetails} />
+    </Stack.Navigator>
+  );
+};
+
+const ChatPage = () => {
+  return (
+    <Stack.Navigator screenOptions={screenOptions}>
+      <Stack.Screen name="ChatPage" component={Chat} />
+    </Stack.Navigator>
+  );
+};
+
 const Routes = () => {
   const { authState } = useAuth();
-  console.log(authState.authenticated);
+  // console.log(authState.authenticated);
 
   return (
     <NavigationContainer>
@@ -92,6 +112,12 @@ const Routes = () => {
                 iconName = focused ? "person" : "person-outline";
               } else if (rn === "Donate") {
                 iconName = focused ? "add-circle" : "add-circle-outline";
+              } else if (rn === "Chat") {
+                iconName = focused
+                  ? "chatbubble-ellipses"
+                  : "chatbubble-ellipses-outline";
+              } else if (rn == "Goals") {
+                iconName = focused ? "ios-bulb" : "ios-bulb-outline";
               }
 
               return <Ionicons name={iconName} size={size} color={color} />;
@@ -105,9 +131,10 @@ const Routes = () => {
             headerShown: false,
           })}
         >
-          {/* <Tab.Screen name="Welcome" component={Auth}></Tab.Screen> */}
           <Tab.Screen name="Explore" component={Explore}></Tab.Screen>
+          <Tab.Screen name="Goals" component={GoalsPage}></Tab.Screen>
           <Tab.Screen name="Donate" component={Add}></Tab.Screen>
+          <Tab.Screen name="Chat" component={ChatPage}></Tab.Screen>
           <Tab.Screen name="You" component={You}></Tab.Screen>
         </Tab.Navigator>
       ) : (
