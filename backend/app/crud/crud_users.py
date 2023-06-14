@@ -36,6 +36,10 @@ def delete_user(db: Session, user_id: int) -> User:
     return db_user
 
 
+def get_username(db: Session, user_id: int) -> str:
+    return db.query(User.username).filter(User.id == user_id).first()
+
+
 def update_user(db: Session, existing_user: User, object_user: User | UserInDB) -> User:
     update_data = object_user.dict(exclude_unset=True)
     for key, value in update_data.items():

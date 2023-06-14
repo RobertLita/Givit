@@ -20,6 +20,8 @@ import Chat from "./screens/chat/Chat";
 import { AuthProvider, useAuth } from "./context/AuthContext";
 import ImageGallery from "./screens/add/ImageGallery";
 import GoalDetails from "./screens/goals/GoalDetails";
+import Success from "./screens/add/Success";
+import Conversations from "./screens/chat/Conversations";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -70,6 +72,7 @@ const Add = () => {
       <Stack.Screen name="AddDonation" component={AddDonation} />
       <Stack.Screen name="CameraView" component={CameraView} />
       <Stack.Screen name="ImageGallery" component={ImageGallery} />
+      <Stack.Screen name="Success" component={Success} />
     </Stack.Navigator>
   );
 };
@@ -86,6 +89,7 @@ const GoalsPage = () => {
 const ChatPage = () => {
   return (
     <Stack.Navigator screenOptions={screenOptions}>
+      <Stack.Screen name="Conversations" component={Conversations} />
       <Stack.Screen name="ChatPage" component={Chat} />
     </Stack.Navigator>
   );

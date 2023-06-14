@@ -23,6 +23,7 @@ def create_object(db: Session, object_body: ObjectCreate) -> Object:
         description=object_body.description,
         condition=object_body.condition,
         category=object_body.category,
+        date=object_body.date,
         donorId=object_body.donorId,
     )
     db.add(db_object)

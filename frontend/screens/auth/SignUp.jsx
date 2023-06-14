@@ -18,7 +18,7 @@ const registerSchema = yup.object().shape({
   username: yup
     .string()
     .min(3, "Username must have at least 3 characters")
-    .max(10, "Username must have at most 10 characters")
+    .max(15, "Username must have at most 15 characters")
     .required("Username is required"),
   email: yup
     .string()

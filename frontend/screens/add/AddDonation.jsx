@@ -15,23 +15,27 @@ import { Picker } from "@react-native-picker/picker";
 import { useRoute } from "@react-navigation/native";
 import { Feather } from "@expo/vector-icons";
 import { useAuth } from "../../context/AuthContext";
+import axios from "axios";
 import * as yup from "yup";
 import { Formik } from "formik";
+import jwtDecode from "jwt-decode";
+import { useNavigation } from "@react-navigation/native";
 
 const addSchema = yup.object().shape({
   title: yup
     .string()
     .min(3, "Minimum 3 characters!")
-    .max(10, "Maximum 10 characters!")
+    .max(25, "Maximum 25 characters!")
     .required("Title is required!"),
   description: yup
     .string()
     .min(5, "Minimum 5 characters!")
-    .max(25, "Maximum 25 characters!")
+    .max(100, "Maximum 100 characters!")
     .required("Description is required!"),
 });
 
 const AddDonation = () => {
+  const navigation = useNavigation();
   const { authState } = useAuth();
   const [id, setId] = useState(0);
   const [imageArray, setImageArray] = useState([]);
@@ -42,8 +46,7 @@ const AddDonation = () => {
   const [error, setError] = useState("");
   const route = useRoute();
 
-  console.log(authState.token);
-
+  // console.log(imageArray);
   useEffect(() => {
     const params = route.params;
 
@@ -59,46 +62,56 @@ const AddDonation = () => {
   const postObject = async (title, description, category, condition) => {
     setLoading(true);
     try {
-      console.log(title, description, category, condition);
-      const response = axios.post("http://10.0.2.2:8000/objects", {
-        title,
+      const currentDate = new Date();
+      const year = currentDate.getFullYear();
+      const month = String(currentDate.getMonth() + 1).padStart(2, "0");
+      const day = String(currentDate.getDate()).padStart(2, "0");
+      const formattedDate = `${year}-${month}-${day}`;
+
+      const response = await axios.post("http://10.0.2.2:8000/objects", {
+        name: title,
         description,
-        category,
         condition,
-        donorId,
+        category,
+        status: "AVAILABLE",
+        date: formattedDate,
+        donorId: jwtDecode(authState.token).sub,
+        organizationId: 0,
       });
-      // console.log("caca");
-      // setId(response.data.id);
-    } catch (e) {
-      console.log(e.status);
+      setId(response.data.id);
+    } catch (error) {
+      console.log(error.request);
     }
     setLoading(false);
   };
 
-  const updatePhoto = async () => {
-    for (const image in imageArray) {
-      try {
-        const formData = new FormData();
-        formData.append("file", {
-          uri: image,
-          name: "photo.jpg",
-          type: "image/jpg",
-        });
-        const response = await axios.post(
-          "http://10.0.2.2:8000/objects/{}/image",
-          formData,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          }
-        );
-        if (response.status === 200) setProfileImage(params.uri);
-      } catch (e) {
-        console.log(e.response);
+  useEffect(() => {
+    const fetchData = async () => {
+      for (const image of imageArray) {
+        try {
+          const formData = new FormData();
+          formData.append("file", {
+            uri: image,
+            name: "photo.jpg",
+            type: "image/jpg",
+          });
+          const response = await axios.post(
+            `http://10.0.2.2:8000/objects/${id}/image`,
+            formData,
+            {
+              headers: {
+                "Content-Type": "multipart/form-data",
+              },
+            }
+          );
+        } catch (e) {
+          console.log(e.response);
+        }
       }
-    }
-  };
+      if (id !== 0) navigation.navigate("Success");
+    };
+    fetchData();
+  }, [id]);
 
   return (
     <SafeAreaView style={{ flex: 1 }} className="bg-white">

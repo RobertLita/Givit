@@ -56,7 +56,7 @@ const Profile = () => {
         setProfileImage(image.data);
         setUserDetails(response.data);
       } catch (e) {
-        console.log(e);
+        console.log(e.request);
       }
     };
     fetchData();

@@ -9,9 +9,9 @@ const Marketplace = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          "http://10.0.2.2:8000/marketplace/?skip=0&limit=100"
-        );
+        // const response = await axios.get(
+        //   "http://10.0.2.2:8000/marketplace/?skip=0&limit=100"
+        // );
         setObjects(response.data);
       } catch (e) {
         console.log(e.request);

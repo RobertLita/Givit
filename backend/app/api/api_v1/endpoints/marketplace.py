@@ -43,20 +43,3 @@ async def read_filtered_marketplace(
         raise HTTPException(status_code=400, detail="Filtering category not found")
     return complete_objects
 
-
-# @router.get("/{object_id}/images")
-# async def download_picture(
-#         object_id: int,
-#         db: Session = Depends(deps.get_db),
-#
-# ):
-#     urls = crud_images.get_images(db, object_id)
-#     links = []
-#     for url in urls:
-#         try:
-#             file = url[0].split("/")[1]
-#             content = await s3_download(key=file, bucket_name="gobjects")
-#             links.append(content)
-#         except Exception as e:
-#             print(e)
-#     return links

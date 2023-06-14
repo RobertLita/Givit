@@ -6,7 +6,8 @@ from app.api.api_v1.endpoints import (
     reviews,
     reward_allocation,
     login,
-    marketplace
+    marketplace,
+    chat
 )
 
 api_router = APIRouter()
@@ -20,4 +21,7 @@ api_router.include_router(
 )
 api_router.include_router(
     marketplace.router, prefix="/marketplace", tags=["marketplace"]
+)
+api_router.include_router(
+    chat.router, prefix="/chat", tags=["chat"]
 )
