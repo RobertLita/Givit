@@ -8,16 +8,18 @@ import {
   View,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { useRoute } from "@react-navigation/native";
 import { useNavigation } from "@react-navigation/native";
 
 const CameraView = () => {
+  const route = useRoute();
   const navigation = useNavigation();
   const [image, setImage] = useState(null);
   const [type, setType] = useState(CameraType.back);
   const [flash, setFlash] = useState(Camera.Constants.FlashMode.off);
   const cameraRef = useRef(null);
   const [permission, requestPermission] = Camera.useCameraPermissions();
-
+  // console.log(route);
   useEffect(() => {
     (async () => {
       requestPermission();
@@ -44,7 +46,9 @@ const CameraView = () => {
   const takePicture = async () => {
     if (cameraRef) {
       try {
-        const dataImage = await cameraRef.current.takePictureAsync();
+        const dataImage = await cameraRef.current.takePictureAsync({
+          quality: 0.5,
+        });
         // console.log(dataImage);
         setImage(dataImage.uri);
       } catch (e) {
@@ -52,7 +56,6 @@ const CameraView = () => {
       }
     }
   };
-
   return (
     <SafeAreaView style={{ flex: 1 }}>
       {image ? (
@@ -64,7 +67,12 @@ const CameraView = () => {
           />
           <View className="absolute h-20 w-full bg-trasparent bottom-4 items-center flex-row justify-between px-6">
             <TouchableOpacity
-              onPress={() => navigation.navigate("AddDonation", { uri: image })}
+              onPress={() =>
+                navigation.navigate(route.params.basePage, {
+                  id: route.params.id,
+                  uri: image,
+                })
+              }
               className="items-center"
             >
               <Ionicons name="checkmark" size={30} color="honeydew" />

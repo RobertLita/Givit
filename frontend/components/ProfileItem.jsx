@@ -4,7 +4,7 @@ import { useNavigation } from "@react-navigation/native";
 import { FontAwesome } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
 
-const ProfileItem = ({ title, iconName, linkTo, count, ...rest }) => {
+const ProfileItem = ({ title, iconName, linkTo, count, data, ...rest }) => {
   const navigation = useNavigation();
   return (
     <View className="flex-row py-3 items-center mx-5 justify-around" rest>
@@ -16,7 +16,9 @@ const ProfileItem = ({ title, iconName, linkTo, count, ...rest }) => {
           {title} ({count})
         </Text>
       </View>
-      <TouchableOpacity onPress={() => navigation.navigate(linkTo)}>
+      <TouchableOpacity
+        onPress={() => navigation.navigate(linkTo, { data: data })}
+      >
         <View className="w-10 h-10 rounded bg-gray-300 justify-center items-center ">
           <MaterialIcons name="arrow-forward-ios" size={24} color="black" />
         </View>

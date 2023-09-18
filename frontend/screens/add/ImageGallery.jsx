@@ -19,7 +19,7 @@ const ImageGallery = () => {
     if (!result.canceled) {
       setImage(result.assets[0].uri);
     } else {
-      navigation.navigate(route.params.basePage);
+      navigation.navigate(route.params.basePage, { id: route.params.id });
     }
   };
 
@@ -34,7 +34,10 @@ const ImageGallery = () => {
 
   useEffect(() => {
     if (image) {
-      navigation.navigate(route.params.basePage, { uri: image });
+      navigation.navigate(route.params.basePage, {
+        id: route.params.id,
+        uri: image,
+      });
     }
   }, [image]);
 

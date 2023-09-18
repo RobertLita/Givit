@@ -1,38 +1,69 @@
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
-import React from "react";
+import { useNavigation } from "@react-navigation/native";
+import React, { useEffect, useState } from "react";
+import { useAuth } from "../context/AuthContext";
 
-const Requirement = ({ name, description, donatedBy }) => {
+const Requirement = ({ name, description, objectId, reqId }) => {
+  const navigation = useNavigation();
+  const [donation, setDonation] = useState(null);
+  const { authState } = useAuth();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        if (reqId !== null && reqId !== undefined) {
+          const response = await axios.get(
+            ` https://83a9-80-96-21-160.ngrok-free.app/objects/?object_id=${objectId}`
+          );
+          setDonation(response.data);
+        }
+      } catch (e) {
+        console.log(e.request);
+      }
+    };
+    fetchData();
+  }, []);
   return (
-    <View
+    <TouchableOpacity
       className="w-11/12 bg-gray-100 max-h-96 rounded-lg items-center py-4 mb-6"
       style={styles.shadow}
+      disabled={objectId === null}
+      onPress={() =>
+        navigation.navigate("DonationDetails", { id: objectId, isReq: true })
+      }
     >
-      <View className="flex-row items-center justify-between w-full">
+      <View className="flex-row items-center justify-evenly w-full">
         <View className="w-2/3 flex-column justify-between ml-2">
           <Text className="text-xl">{name}</Text>
           <Text className="text-base  mt-4">{description}</Text>
         </View>
-        {!donatedBy && (
-          <View>
+        <View className="w-1/3">
+          {objectId === null && authState.userType !== "organization" && (
             <TouchableOpacity
-              style={styles.shadow}
+              style={[styles.shadow]}
               className="px-6 py-2 bg-red-400 rounded-md items-center mr-2"
+              onPress={() =>
+                navigation.navigate("AddDonation", {
+                  isGoal: true,
+                  reqId: reqId,
+                })
+              }
             >
-              <Text className="text-base">Donate</Text>
+              <Text className="text-base w-14 items-center">Donate</Text>
             </TouchableOpacity>
-          </View>
-        )}
+          )}
+        </View>
       </View>
-      {donatedBy ? (
+      {objectId !== null ? (
         <View className="mt-6 bg-green-200 rounded px-10">
-          <Text className="text-xl">Donated by {donatedBy}</Text>
+          <Text className="text-xl">Donated </Text>
         </View>
       ) : (
         <View className="mt-6 bg-red-200 rounded px-10">
           <Text className="text-xl">Looking for donator...</Text>
         </View>
       )}
-    </View>
+    </TouchableOpacity>
   );
 };
 

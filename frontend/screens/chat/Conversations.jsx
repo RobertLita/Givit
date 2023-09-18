@@ -1,7 +1,6 @@
 import { View, Text, SafeAreaView, FlatList } from "react-native";
 import { useAuth } from "../../context/AuthContext";
 import React, { useEffect, useState } from "react";
-import jwtDecode from "jwt-decode";
 import axios from "axios";
 import Chatter from "../../components/Chatter";
 import ListHeader from "../../components/ListHeader";
@@ -9,12 +8,11 @@ import ListHeader from "../../components/ListHeader";
 const Conversations = () => {
   const [conversations, setConversations] = useState([]);
   const { authState } = useAuth();
-  //   console.log(conversations);
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `http://10.0.2.2:8000/chat/chatters/${jwtDecode(authState.token).sub}`
+          ` https://83a9-80-96-21-160.ngrok-free.app/chat/chatters/${authState.userId}`
         );
         setConversations(response.data);
       } catch (e) {
@@ -25,7 +23,7 @@ const Conversations = () => {
   }, []);
   return (
     <SafeAreaView style={{ flex: 1 }} className="bg-white">
-      {conversations === [] ? (
+      {conversations.length === 0 ? (
         <View className="justify-center items-center">
           <Text className="text-xl">No conversations!</Text>
         </View>
@@ -40,7 +38,7 @@ const Conversations = () => {
               <Chatter
                 key={index}
                 name={item[1]}
-                myId={jwtDecode(authState.token).sub}
+                myId={authState.userId}
                 otherId={item[0]}
               />
             );

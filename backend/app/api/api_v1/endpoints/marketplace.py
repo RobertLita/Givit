@@ -29,8 +29,11 @@ async def read_filtered_marketplace(
 ):
     complete_objects = []
     try:
-        category_enum = ObjectCategory(category)
-        objects = crud_objects.get_marketplace_filtered(db, category_enum, skip, limit)
+        if category == "NONE":
+            objects = crud_objects.get_marketplace(db, skip, limit)
+        else:
+            category_enum = ObjectCategory(category)
+            objects = crud_objects.get_marketplace_filtered(db, category_enum, skip, limit)
 
         for obj in objects:
             complete_object = obj.__dict__
@@ -41,5 +44,20 @@ async def read_filtered_marketplace(
         return complete_objects
     except ValueError:
         raise HTTPException(status_code=400, detail="Filtering category not found")
-    return complete_objects
 
+
+@router.get("/{type}/{user_id}")
+async def my_objects(
+        type: str, user_id: int, skip: int = 0, limit: int = 10, db: Session = Depends(deps.get_db)
+):
+    if type == 'donor':
+        objects = crud_objects.get_my_objects(db, donor_id=user_id, skip=skip, limit=limit)
+    else:
+        objects = crud_objects.get_my_objects(db, organization_id=user_id, skip=skip, limit=limit)
+    complete_objects = []
+    for obj in objects:
+        complete_object = obj.__dict__
+        image = crud_images.get_images(db, complete_object['id'])[0][0].split('/')[1]
+        complete_object["image"] = await s3_download(key=image, bucket_name="gobjects")
+        complete_objects.append(complete_object)
+    return complete_objects

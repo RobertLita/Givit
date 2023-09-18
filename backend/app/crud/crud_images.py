@@ -12,3 +12,10 @@ def create_image(db: Session, url: str, objectId: int) -> Image:
     db.commit()
     db.refresh(db_image)
     return db_image
+
+
+def delete_image(db: Session, object_id: int) -> Image:
+    db_image = db.query(Image).filter(Image.objectId == object_id).all()
+    for image in db_image:
+        db.delete(image)
+    db.commit()

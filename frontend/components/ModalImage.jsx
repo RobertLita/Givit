@@ -2,7 +2,7 @@ import { View, Text, Modal, Pressable, StyleSheet } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import React from "react";
 
-const ModalImage = ({ modalVisible, setModalVisible, basePage }) => {
+const ModalImage = ({ modalVisible, setModalVisible, basePage, id }) => {
   const navigation = useNavigation();
   return (
     <View>
@@ -22,7 +22,10 @@ const ModalImage = ({ modalVisible, setModalVisible, basePage }) => {
             <Pressable
               onPress={() => {
                 setModalVisible(!modalVisible);
-                navigation.navigate("ImageGallery", { basePage: basePage });
+                navigation.navigate("ImageGallery", {
+                  basePage: basePage,
+                  id: id,
+                });
               }}
               className="w-1/2 items-center py-2 rounded my-2 mt-4"
               style={{ backgroundColor: "#F9AC67" }}
@@ -32,7 +35,10 @@ const ModalImage = ({ modalVisible, setModalVisible, basePage }) => {
             <Pressable
               onPress={() => {
                 setModalVisible(!modalVisible);
-                navigation.navigate("CameraView");
+                navigation.navigate("CameraView", {
+                  basePage: basePage,
+                  id: id,
+                });
               }}
               className="w-1/2 items-center py-2 rounded my-2"
               style={{ backgroundColor: "#F9AC67" }}

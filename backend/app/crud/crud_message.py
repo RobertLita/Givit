@@ -30,4 +30,6 @@ def get_all_messages(db: Session, user_id_1: int, user_id_2: int) -> [Message]:
 def get_chatters(db: Session, user_id: int):
     result = db.query(Message.recipientId).filter(Message.senderId == user_id).distinct().all()
     chatters = [row[0] for row in result]
-    return chatters
+    result = db.query(Message.senderId).filter(Message.recipientId == user_id).distinct().all()
+    chatters += [row[0] for row in result]
+    return list(set(chatters))

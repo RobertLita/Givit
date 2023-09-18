@@ -1,4 +1,3 @@
-import { StatusBar } from "expo-status-bar";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -49,6 +48,8 @@ const Explore = () => {
       <Stack.Screen name="Marketplace" component={Marketplace} />
       <Stack.Screen name="Categories" component={Categories} />
       <Stack.Screen name="DonationDetails" component={DonationDetails} />
+      <Stack.Screen name="CameraView" component={CameraView} />
+      <Stack.Screen name="ImageGallery" component={ImageGallery} />
     </Stack.Navigator>
   );
 };
@@ -60,6 +61,7 @@ const You = () => {
       <Stack.Screen name="UserRewards" component={UserRewards} />
       <Stack.Screen name="UserReviews" component={UserReviews} />
       <Stack.Screen name="UserDonations" component={UserDonations} />
+      <Stack.Screen name="DonationDetails" component={DonationDetails} />
       <Stack.Screen name="CameraView" component={CameraView} />
       <Stack.Screen name="ImageGallery" component={ImageGallery} />
     </Stack.Navigator>
@@ -82,6 +84,11 @@ const GoalsPage = () => {
     <Stack.Navigator screenOptions={screenOptions}>
       <Stack.Screen name="GoalsPage" component={Goals} />
       <Stack.Screen name="GoalDetails" component={GoalDetails} />
+      <Stack.Screen name="AddDonation" component={AddDonation} />
+      <Stack.Screen name="CameraView" component={CameraView} />
+      <Stack.Screen name="ImageGallery" component={ImageGallery} />
+      <Stack.Screen name="DonationDetails" component={DonationDetails} />
+      <Stack.Screen name="Success" component={Success} />
     </Stack.Navigator>
   );
 };
@@ -89,8 +96,16 @@ const GoalsPage = () => {
 const ChatPage = () => {
   return (
     <Stack.Navigator screenOptions={screenOptions}>
-      <Stack.Screen name="Conversations" component={Conversations} />
-      <Stack.Screen name="ChatPage" component={Chat} />
+      <Stack.Screen
+        name="Conversations"
+        component={Conversations}
+        options={{ unmountOnBlur: true }}
+      />
+      <Stack.Screen
+        name="ChatPage"
+        component={Chat}
+        options={{ unmountOnBlur: true }}
+      />
     </Stack.Navigator>
   );
 };
@@ -138,7 +153,18 @@ const Routes = () => {
           <Tab.Screen name="Explore" component={Explore}></Tab.Screen>
           <Tab.Screen name="Goals" component={GoalsPage}></Tab.Screen>
           <Tab.Screen name="Donate" component={Add}></Tab.Screen>
-          <Tab.Screen name="Chat" component={ChatPage}></Tab.Screen>
+          <Tab.Screen
+            name="Chat"
+            component={ChatPage}
+            listeners={({ navigation }) => ({
+              tabPress: () => {
+                navigation.reset({
+                  index: 0,
+                  routes: [{ name: "Chat" }],
+                });
+              },
+            })}
+          />
           <Tab.Screen name="You" component={You}></Tab.Screen>
         </Tab.Navigator>
       ) : (

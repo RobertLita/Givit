@@ -11,7 +11,6 @@ from app.s3.file_operations import s3_download, s3_upload
 import magic
 from uuid import uuid4
 
-
 SUPPORTED_FILE_TYPES = {
     'image/png': 'png',
     'image/jpeg': 'jpg',
@@ -22,10 +21,10 @@ router = APIRouter()
 
 @router.get("/", response_model=list[User])
 async def read_users(
-    skip: int = 0,
-    limit: int = 10,
-    db: Session = Depends(deps.get_db),
-    current_user: UserModel = Depends(deps.get_current_active_superuser),
+        skip: int = 0,
+        limit: int = 10,
+        db: Session = Depends(deps.get_db),
+        current_user: UserModel = Depends(deps.get_current_active_superuser),
 ):
     users = crud_users.get_users(db, skip, limit)
     return users
@@ -33,8 +32,8 @@ async def read_users(
 
 @router.post("/", response_model=User)
 async def create_user(
-    user: UserCreate,
-    db: Session = Depends(deps.get_db),
+        user: UserCreate,
+        db: Session = Depends(deps.get_db),
 ):
     db_user = crud_users.get_by_email(db, user.email)
     if db_user:
@@ -44,15 +43,15 @@ async def create_user(
 
 @router.get("/me", response_model=User)
 async def read_user_me(
-    db: Session = Depends(deps.get_db),
-    current_user: UserModel = Depends(deps.get_current_active_user),
+        db: Session = Depends(deps.get_db),
+        current_user: UserModel = Depends(deps.get_current_active_user),
 ):
     return current_user
 
 
 @router.get("/profilepicture")
 async def download_picture(
-    current_user: UserModel = Depends(deps.get_current_active_user),
+        current_user: UserModel = Depends(deps.get_current_active_user),
 ):
     url = current_user.profile_url
     try:
@@ -63,11 +62,25 @@ async def download_picture(
         print(e)
 
 
+@router.get("/{user_id}/profilepicture")
+async def download_picture(
+        user_id: int,
+        db: Session = Depends(deps.get_db)
+):
+    url = crud_users.get_user(db, user_id).profile_url
+    try:
+        file = url.split("/")[1]
+        content = await s3_download(key=file, bucket_name="gusers")
+        return content
+    except Exception as e:
+        print(e)
+
+
 @router.post("/profilepicture")
 async def upload_picture(
-    current_user: UserModel = Depends(deps.get_current_active_user),
-    db: Session = Depends(deps.get_db),
-    file: UploadFile | None = None,
+        current_user: UserModel = Depends(deps.get_current_active_user),
+        db: Session = Depends(deps.get_db),
+        file: UploadFile | None = None,
 ):
     if not file:
         raise HTTPException(status_code=400, detail="No file found")
@@ -102,9 +115,9 @@ async def read_user(user_id: int, db: Session = Depends(deps.get_db)):
 
 @router.delete("/{user_id}", response_model=User)
 async def delete_user(
-    user_id: int,
-    db: Session = Depends(deps.get_db),
-    current_user: User = Depends(deps.get_current_active_superuser),
+        user_id: int,
+        db: Session = Depends(deps.get_db),
+        current_user: User = Depends(deps.get_current_active_superuser),
 ):
     db_user = crud_users.get_user(db, user_id)
     if db_user is None:
@@ -123,10 +136,10 @@ async def get_user_rewards(user_id: int, db: Session = Depends(deps.get_db)):
 
 @router.patch("/{user_id}", response_model=User)
 async def update_user(
-    user_id: int,
-    user: User,
-    db: Session = Depends(deps.get_db),
-    current_user: UserModel = Depends(deps.get_current_active_superuser),
+        user_id: int,
+        user: User,
+        db: Session = Depends(deps.get_db),
+        current_user: UserModel = Depends(deps.get_current_active_superuser),
 ):
     db_user = crud_users.get_user(db, user_id)
     if db_user is None:
@@ -136,10 +149,10 @@ async def update_user(
 
 @router.put("/me", response_model=User)
 async def update_user_me(
-    db: Session = Depends(deps.get_db),
-    username: str = Body(None),
-    email: EmailStr = Body(None),
-    current_user: UserModel = Depends(deps.get_current_active_user),
+        db: Session = Depends(deps.get_db),
+        username: str = Body(None),
+        email: EmailStr = Body(None),
+        current_user: UserModel = Depends(deps.get_current_active_user),
 ):
     current_user_data = jsonable_encoder(current_user)
     user_in = UserInDB(**current_user_data)

@@ -36,7 +36,8 @@ class User(UserBase):
     rewardCount: int = 0
     profile_url: str = ""
     rewards: list[RewardAllocation] = []
-    donations: list[Object] = []
+    donor_donations: list[Object] = []
+    organization_donations: list[Object] = []
     reviews: list[Review] = []
 
     class Config:

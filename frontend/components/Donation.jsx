@@ -22,7 +22,6 @@ const Donation = ({
   date,
   ...rest
 }) => {
-  const [fav, setFav] = useState(false);
   const navigation = useNavigation();
   return (
     <TouchableOpacity
@@ -33,31 +32,10 @@ const Donation = ({
       <Image source={{ uri: image }} style={{ width: "40%", height: "100%" }} />
       <View style={{ flex: 1 }}>
         <View
-          className="flex-row justify-between mt-3 items-center"
+          className="flex-row justify-center mt-3 items-center"
           style={{ flex: 1 }}
         >
           <Badge label={category} />
-          {!fav ? (
-            <AntDesign
-              name="hearto"
-              size={20}
-              color="black"
-              style={{ marginRight: 6 }}
-              onPress={() => {
-                setFav(true);
-              }}
-            />
-          ) : (
-            <AntDesign
-              name="heart"
-              size={20}
-              color="red"
-              style={{ marginRight: 6 }}
-              onPress={() => {
-                setFav(false);
-              }}
-            />
-          )}
         </View>
         <View className="justify-center " style={{ flex: 2 }}>
           <Text className="text-xl ml-4">{name}</Text>

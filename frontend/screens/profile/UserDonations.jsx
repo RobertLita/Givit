@@ -1,60 +1,32 @@
 import { SafeAreaView, FlatList } from "react-native";
-import React from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { useIsFocused } from "@react-navigation/native";
+
+import { useAuth } from "../../context/AuthContext";
 import Donation from "../../components/Donation";
 import ListHeader from "../../components/ListHeader";
 
-const DATA = [
-  {
-    id: "1",
-    title: "First Item",
-  },
-  {
-    id: "2",
-    title: "First Item",
-  },
-  {
-    id: "3",
-    title: "First Item",
-  },
-  {
-    id: "4",
-    title: "First Item",
-  },
-  {
-    id: "5",
-    title: "First Item",
-  },
-  {
-    id: "6",
-    title: "First Item",
-  },
-  {
-    id: "7",
-    title: "First Item",
-  },
-  {
-    id: "8",
-    title: "First Item",
-  },
-  {
-    id: "9",
-    title: "First Item",
-  },
-  {
-    id: "10",
-    title: "First Item",
-  },
-  {
-    id: "11",
-    title: "First Item",
-  },
-  {
-    id: "12",
-    title: "First Item",
-  },
-];
-
 const UserDonations = () => {
+  const { authState } = useAuth();
+  const isFocused = useIsFocused();
+  const [donations, setDonations] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          ` https://83a9-80-96-21-160.ngrok-free.app/marketplace/${authState.userType}/${authState.userId}?skip=0&limit=100`
+        );
+        setDonations(response.data);
+      } catch (e) {
+        console.log(e);
+        console.log(e.request);
+      }
+    };
+    fetchData();
+  }, [isFocused]);
+
   return (
     <SafeAreaView style={{ flex: 1 }} className="bg-white ">
       <FlatList
@@ -62,16 +34,18 @@ const UserDonations = () => {
         contentContainerStyle={{
           alignItems: "center",
         }}
-        data={DATA}
+        data={donations}
         renderItem={({ item, index }) => (
           <Donation
             key={index}
-            category="PERSONAL"
-            name="Jucarie de plus"
-            status="AVAILABLE"
-            condition="ACCEPTABLE"
-            username="robert"
-            date="2023-05-04"
+            category={item.category}
+            name={item.name}
+            status={item.status}
+            condition={item.condition}
+            username=""
+            date={item.date}
+            image={item.image}
+            id={item.id}
             className="bg-gray-100 h-64 my-2 rounded-md border border-gray-300 flex-row w-11/12"
           />
         )}

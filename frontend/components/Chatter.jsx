@@ -6,12 +6,12 @@ import { useNavigation } from "@react-navigation/native";
 const Chatter = ({ name, myId, otherId }) => {
   const navigation = useNavigation();
   return (
-    <View className="bg-gray-200 flex-row h-16 items-center rounded">
+    <View className="bg-gray-200 flex-row h-16 items-center rounded mb-4">
       <View className="w-3/4 items-center">
         <Text className="text-black-400 font-medium text-xl">{name}</Text>
       </View>
       <TouchableOpacity
-        onPress={() => navigation.navigate("ChatPage", { myId, otherId })}
+        onPress={() => navigation.navigate("ChatPage", { myId, otherId, name })}
       >
         <View className="w-10 h-10 rounded bg-gray-300 justify-center items-center ">
           <MaterialIcons name="arrow-forward-ios" size={24} color="black" />

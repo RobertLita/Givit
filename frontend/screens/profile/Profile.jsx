@@ -16,18 +16,19 @@ import axios from "axios";
 import ModalImage from "../../components/ModalImage";
 
 const Profile = () => {
-  const { logout } = useAuth();
+  const { logout, authState } = useAuth();
   const route = useRoute();
   const [profileImage, setProfileImage] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [userDetails, setUserDetails] = useState({});
+  const [donationCount, setDonationCount] = useState(0);
 
   const settingsItems = [
     {
       name: "Donations",
       icon: "gift",
       linkTo: "UserDonations",
-      count: userDetails.donationCount,
+      count: donationCount,
     },
     {
       name: "Reviews",
@@ -39,7 +40,7 @@ const Profile = () => {
       name: "Rewards",
       icon: "trophy",
       linkTo: "UserRewards",
-      count: userDetails.reviewCount,
+      count: userDetails.rewardCount,
     },
   ];
   const onSignOut = async () => {
@@ -49,12 +50,17 @@ const Profile = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("http://10.0.2.2:8000/users/me");
+        const response = await axios.get(
+          " https://83a9-80-96-21-160.ngrok-free.app/users/me"
+        );
         const image = await axios.get(
-          "http://10.0.2.2:8000/users/profilepicture"
+          " https://83a9-80-96-21-160.ngrok-free.app/users/profilepicture"
         );
         setProfileImage(image.data);
         setUserDetails(response.data);
+        if (authState.userType === "donor")
+          setDonationCount(response.data.donor_donations.length);
+        else setDonationCount(response.data.organization_donations.length);
       } catch (e) {
         console.log(e.request);
       }
@@ -74,7 +80,7 @@ const Profile = () => {
             type: "image/jpg",
           });
           const response = await axios.post(
-            "http://10.0.2.2:8000/users/profilepicture",
+            " https://83a9-80-96-21-160.ngrok-free.app/users/profilepicture",
             formData,
             {
               headers: {
@@ -84,7 +90,7 @@ const Profile = () => {
           );
           if (response.status === 200) setProfileImage(params.uri);
         } catch (e) {
-          console.log(e.response);
+          console.log(e);
         }
       }
     };
@@ -126,15 +132,42 @@ const Profile = () => {
       </View>
 
       <View className="w-full mt-4 justify-evenly" style={{ flex: 3 }}>
-        {settingsItems.map((item, index) => (
-          <ProfileItem
-            key={index}
-            title={item.name}
-            iconName={item.icon}
-            linkTo={item.linkTo}
-            count={item.count}
-          />
-        ))}
+        {settingsItems.map((item, index) => {
+          if (item.name === "Donations") {
+            if (authState.userType === "donor")
+              return (
+                <ProfileItem
+                  key={index}
+                  title={item.name}
+                  iconName={item.icon}
+                  linkTo={item.linkTo}
+                  data={userDetails.donor_donations}
+                  count={item.count}
+                />
+              );
+            else
+              return (
+                <ProfileItem
+                  key={index}
+                  title={item.name}
+                  iconName={item.icon}
+                  linkTo={item.linkTo}
+                  data={userDetails.organization_donations}
+                  count={item.count}
+                />
+              );
+          } else
+            return (
+              <ProfileItem
+                key={index}
+                title={item.name}
+                iconName={item.icon}
+                linkTo={item.linkTo}
+                data={userDetails[item.name.toLowerCase()]}
+                count={item.count}
+              />
+            );
+        })}
       </View>
 
       <View className="justify-center w-full items-center" style={{ flex: 1 }}>

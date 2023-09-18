@@ -1,9 +1,10 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import * as SecureStore from "expo-secure-store";
 import axios from "axios";
+import jwtDecode from "jwt-decode";
 
 const TOKEN_KEY = "my-jwt";
-export const API_URL = "http://10.0.2.2:8000";
+export const API_URL = " https://83a9-80-96-21-160.ngrok-free.app";
 const AuthContext = createContext();
 
 export const useAuth = () => {
@@ -13,16 +14,21 @@ export const useAuth = () => {
 export const AuthProvider = ({ children }) => {
   const [authState, setAuthState] = useState({
     token: null,
+    userType: null,
+    userId: null,
+    isAdmin: null,
     authenticated: null,
   });
 
   useEffect(() => {
     const loadToken = async () => {
       const token = await SecureStore.getItemAsync(TOKEN_KEY);
-
       if (token) {
         setAuthState({
           token: token,
+          userType: JSON.parse(jwtDecode(token).sub).type.split(".")[1],
+          userId: JSON.parse(jwtDecode(token).sub).id,
+          isAdmin: JSON.parse(jwtDecode(token).sub).id_admin,
           authenticated: true,
         });
 
@@ -61,9 +67,14 @@ export const AuthProvider = ({ children }) => {
         },
         { headers: { "Content-Type": "application/x-www-form-urlencoded" } }
       );
-
+      console.log(JSON.parse(jwtDecode(response.data.access_token).sub));
       setAuthState({
         token: response.data.access_token,
+        userType: JSON.parse(
+          jwtDecode(response.data.access_token).sub
+        ).type.split(".")[1],
+        userId: JSON.parse(jwtDecode(response.data.access_token).sub).id,
+        isAdmin: JSON.parse(jwtDecode(response.data.access_token).sub).is_admin,
         authenticated: true,
       });
 
@@ -75,6 +86,7 @@ export const AuthProvider = ({ children }) => {
 
       return { data: "success", status: response.status };
     } catch (e) {
+      console.log(e);
       return { data: e.response.data.detail, status: e.response.status };
     }
   };
@@ -84,6 +96,9 @@ export const AuthProvider = ({ children }) => {
     axios.defaults.headers.common["Authorization"] = "";
     setAuthState({
       token: "",
+      userType: null,
+      userId: null,
+      isAdmin: null,
       authenticated: false,
     });
   };

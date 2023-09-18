@@ -1,18 +1,44 @@
-import { View, Text, StyleSheet } from "react-native";
-import React from "react";
+import { View, Text, StyleSheet, Image } from "react-native";
+import React, { useEffect, useState } from "react";
 import { FontAwesome } from "@expo/vector-icons";
+import axios from "axios";
 
-const Review = () => {
-  const rating = 4.5;
-  const message =
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent dictum, tortor at fringilla volutpat, augue ante viverra purus, sit amet convallis lacus eros nec odio. ";
+const Review = ({ rating, id, message }) => {
+  const [reviewerName, setReviewerName] = useState("");
+  const [profilePicture, setProfilePicture] = useState(null);
+  useEffect(() => {
+    axios
+      .get(` https://83a9-80-96-21-160.ngrok-free.app/users/${id}`)
+      .then((response) => {
+        setReviewerName(response.data.username);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+    axios
+      .get(
+        ` https://83a9-80-96-21-160.ngrok-free.app/users/${id}/profilepicture`
+      )
+      .then((response) => {
+        setProfilePicture(response.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
   return (
     <View
-      className="w-11/12 bg-gray-100 max-h-96 justify-around rounded-lg items-center py-4 mb-6"
+      className="w-10/12 bg-gray-100 max-h-96 justify-around rounded-lg items-center py-4 mb-6"
       style={styles.shadow}
     >
       <View className="flex-row justify-between items-center w-full">
-        <View className="bg-gray-400 w-20 h-20 mx-3 rounded-full items-center justify-center" />
+        <Image
+          className="bg-gray-400 w-20 h-20 mx-3 rounded-full items-center justify-center"
+          source={{
+            uri: profilePicture,
+          }}
+        />
+        <Text className="text-lg">{reviewerName}</Text>
         <View className="bg-gray-300 w-12 h-6 items-center justify-around rounded-md flex-row mr-5">
           <FontAwesome name="star" size={16} color="black" />
           <Text>{rating}</Text>

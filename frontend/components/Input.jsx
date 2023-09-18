@@ -15,13 +15,13 @@ const Input = ({
   password,
   handleChange,
   handleBlur,
-  rest,
+  ...rest
 }) => {
   const [secure, setSecure] = useState(secureTextEntry);
   const [isFocused, setIsFocused] = useState(false);
   const inputType = email ? "email-address" : "default";
   const handleInputBlur = (event) => {
-    event.persist(); // Persist the synthetic event
+    event.persist();
     if (handleBlur !== undefined) handleBlur(event);
     setIsFocused(false);
   };

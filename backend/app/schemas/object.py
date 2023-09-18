@@ -13,6 +13,8 @@ class ObjectBase(BaseModel):
     category: ObjectCategory
     status: ObjectStatus = ObjectStatus.available
     date: datetime.date
+    proof: str | None = None
+    isGoal: bool = False
     donorId: int
     organizationId: int | None = None
 

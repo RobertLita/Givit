@@ -20,8 +20,11 @@ class User(Base):
     is_active = Column(Boolean(), default=True)
     is_superuser = Column(Boolean(), default=False)
 
-    donations = relationship(
+    donor_donations = relationship(
         "Object", back_populates="donor", foreign_keys="[Object.donorId]"
+    )
+    organization_donations = relationship(
+        "Object", back_populates="organization", foreign_keys="[Object.organizationId]"
     )
     reviews = relationship(
         "Review", back_populates="reviewed", foreign_keys="[Review.reviewedId]"

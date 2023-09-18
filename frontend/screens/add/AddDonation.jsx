@@ -18,7 +18,6 @@ import { useAuth } from "../../context/AuthContext";
 import axios from "axios";
 import * as yup from "yup";
 import { Formik } from "formik";
-import jwtDecode from "jwt-decode";
 import { useNavigation } from "@react-navigation/native";
 
 const addSchema = yup.object().shape({
@@ -30,7 +29,7 @@ const addSchema = yup.object().shape({
   description: yup
     .string()
     .min(5, "Minimum 5 characters!")
-    .max(100, "Maximum 100 characters!")
+    .max(150, "Maximum 150 characters!")
     .required("Description is required!"),
 });
 
@@ -44,18 +43,22 @@ const AddDonation = () => {
   const [selectedCondition, setSelectedCondition] = useState();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [isGoal, setIsGoal] = useState(false);
+  const [reqId, setReqId] = useState(0);
   const route = useRoute();
 
-  // console.log(imageArray);
   useEffect(() => {
     const params = route.params;
-
     if (
       params !== undefined &&
       !imageArray.includes(params.uri) &&
-      params.uri !== null
+      params.uri !== undefined
     ) {
       setImageArray((imageArray) => [...imageArray, params.uri]);
+    }
+    if (params !== undefined && params.isGoal !== undefined) {
+      setIsGoal(params.isGoal);
+      setReqId(params.reqId);
     }
   }, [route]);
 
@@ -68,16 +71,20 @@ const AddDonation = () => {
       const day = String(currentDate.getDate()).padStart(2, "0");
       const formattedDate = `${year}-${month}-${day}`;
 
-      const response = await axios.post("http://10.0.2.2:8000/objects", {
-        name: title,
-        description,
-        condition,
-        category,
-        status: "AVAILABLE",
-        date: formattedDate,
-        donorId: jwtDecode(authState.token).sub,
-        organizationId: 0,
-      });
+      const response = await axios.post(
+        ` https://83a9-80-96-21-160.ngrok-free.app/objects/?requirement_id=${reqId}`,
+        {
+          name: title,
+          description,
+          condition,
+          category,
+          status: "AVAILABLE",
+          date: formattedDate,
+          isGoal: isGoal,
+          donorId: authState.userId,
+          organizationId: 0,
+        }
+      );
       setId(response.data.id);
     } catch (error) {
       console.log(error.request);
@@ -96,7 +103,7 @@ const AddDonation = () => {
             type: "image/jpg",
           });
           const response = await axios.post(
-            `http://10.0.2.2:8000/objects/${id}/image`,
+            ` https://83a9-80-96-21-160.ngrok-free.app/objects/${id}/image`,
             formData,
             {
               headers: {

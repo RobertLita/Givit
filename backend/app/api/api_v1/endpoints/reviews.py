@@ -1,7 +1,10 @@
 from fastapi import APIRouter, Depends, HTTPException
+from sqlalchemy import or_, and_
+
 from app.api import deps
 from sqlalchemy.orm import Session
 from ....crud import crud_reviews
+from app.models.review import Review as ReviewModel
 from app.schemas.review import Review, ReviewCreate
 from app.crud.crud_users import add_review_to_user
 
@@ -10,7 +13,7 @@ router = APIRouter()
 
 @router.get("/", response_model=list[Review])
 async def read_reviews(
-    skip: int = 0, limit: int = 10, db: Session = Depends(deps.get_db)
+        skip: int = 0, limit: int = 10, db: Session = Depends(deps.get_db)
 ):
     reviews = crud_reviews.get_reviews(db, skip, limit)
     return reviews
@@ -51,9 +54,21 @@ async def delete_review(review_id: int, db: Session = Depends(deps.get_db)):
 
 @router.patch("/{review_id}", response_model=Review)
 async def update_object(
-    review_id: int, review: Review, db: Session = Depends(deps.get_db)
+        review_id: int, review: Review, db: Session = Depends(deps.get_db)
 ):
     db_review = crud_reviews.get_review(db, review_id)
     if db_review is None:
         raise HTTPException(status_code=404, detail=f"Review was not found")
     return crud_reviews.update_review(db, existing_review=db_review, review_body=review)
+
+
+@router.get("/{reviewer_id}/{reviewed_id}")
+async def check_review(reviewer_id: int, reviewed_id: int, db: Session = Depends(deps.get_db)):
+    try:
+        exists_query = db.query(ReviewModel).filter(and_(ReviewModel.reviewedId == reviewed_id, ReviewModel.reviewerId == reviewer_id)).first()
+        if exists_query is not None:
+            return True
+        return False
+    except Exception as e:
+        print(e)
+        return False

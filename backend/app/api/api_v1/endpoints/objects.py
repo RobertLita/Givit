@@ -1,13 +1,15 @@
 from fastapi import APIRouter, Depends, HTTPException, UploadFile
 from app.api import deps
 from sqlalchemy.orm import Session
-from ....crud import crud_objects, crud_images
+from ....crud import crud_objects, crud_images, crud_reward_allocation
 from app.schemas.object import ObjectCreate, Object
 from app.schemas.user import UserDetail
-from app.crud.crud_users import increment_donation
+from app.crud.crud_users import increment_donation, increment_rewards
 from app.s3.file_operations import s3_download, s3_upload
 import magic
 from uuid import uuid4
+
+from ....models import Requirement, RewardAllocation
 
 SUPPORTED_FILE_TYPES = {
     'image/png': 'png',
@@ -18,7 +20,7 @@ router = APIRouter()
 
 
 @router.post("/", response_model=Object)
-async def create_object(object: ObjectCreate, db: Session = Depends(deps.get_db)):
+async def create_object(object: ObjectCreate, requirement_id: int = 0, db: Session = Depends(deps.get_db)):
     if (
             object.description is None
             or object.name is None
@@ -32,7 +34,19 @@ async def create_object(object: ObjectCreate, db: Session = Depends(deps.get_db)
     if object.donorId is None:
         raise HTTPException(status_code=400, detail="Object must have a donor")
     new_object = crud_objects.create_object(db, object)
-    increment_donation(db, object.donorId)
+    new_user = increment_donation(db, object.donorId)
+    if new_user.donationCount == 1:
+        new_userr = increment_rewards(db, object.donorId)
+        db_allocation = RewardAllocation(
+            userId=new_user.id, rewardId=1
+        )
+        db.add(db_allocation)
+        db.commit()
+        db.refresh(db_allocation)
+    if object.isGoal:
+        req = db.query(Requirement).filter(Requirement.id == requirement_id).first()
+        setattr(req, "objectId", new_object.id)
+        db.commit()
     return new_object
 
 
@@ -45,13 +59,6 @@ async def upload_picture(
     if not file:
         raise HTTPException(status_code=400, detail="No file found")
     content = await file.read()
-    size = len(content)
-
-    if not 0 < size <= 1 * (1024 * 1024):
-        raise HTTPException(
-            status_code=400,
-            detail='Supported file size < 1MB'
-        )
     file_type = magic.from_buffer(buffer=content, mime=True)
     if file_type not in SUPPORTED_FILE_TYPES:
         raise HTTPException(
@@ -100,13 +107,14 @@ async def read_object(object_id: int, db: Session = Depends(deps.get_db)):
     return complete_object
 
 
-@router.delete("/{object_id}", response_model=Object)
+@router.delete("/{object_id}")
 async def delete_object(object_id: int, db: Session = Depends(deps.get_db)):
     db_object = crud_objects.get_object(db, object_id)
     if db_object is None:
         raise HTTPException(
             status_code=404, detail=f"Object with id = {object_id} was not found"
         )
+    crud_images.delete_image(db, object_id)
     db_object = crud_objects.delete_object(db, object_id)
     return db_object
 
@@ -146,3 +154,37 @@ async def update_object(
             status_code=404, detail=f"Object with id = {object_id} was not found"
         )
     return crud_objects.update_object(db, existing_object=db_object, object_body=object)
+
+
+@router.get("/{object_id}/proof")
+async def download_picture(object_id: int, db: Session = Depends(deps.get_db)):
+    db_object = crud_objects.get_object(db, object_id)
+    url = db_object.proof
+    try:
+        file = url.split("/")[1]
+        content = await s3_download(key=file, bucket_name="gobjects")
+        return content
+    except Exception as e:
+        print(e)
+
+
+@router.post("/{object_id}/proof")
+async def upload_picture(
+        object_id: int,
+        db: Session = Depends(deps.get_db),
+        file: UploadFile | None = None,
+):
+    if not file:
+        raise HTTPException(status_code=400, detail="No file found")
+    content = await file.read()
+    file_type = magic.from_buffer(buffer=content, mime=True)
+    if file_type not in SUPPORTED_FILE_TYPES:
+        raise HTTPException(
+            status_code=400,
+            detail=f'Unsupported file type: {file_type}. Supported types are {SUPPORTED_FILE_TYPES}'
+        )
+    file_name = f'{uuid4()}.{SUPPORTED_FILE_TYPES[file_type]}'
+    await s3_upload(contents=content, key=file_name, bucket_name="gobjects")
+    crud_objects.add_proof(db, object_id, f"gobjects/{file_name}")
+
+    return {'file_name': file_name}

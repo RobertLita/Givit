@@ -7,7 +7,9 @@ from app.api.api_v1.endpoints import (
     reward_allocation,
     login,
     marketplace,
-    chat
+    chat,
+    goals,
+    requirements
 )
 
 api_router = APIRouter()
@@ -25,3 +27,5 @@ api_router.include_router(
 api_router.include_router(
     chat.router, prefix="/chat", tags=["chat"]
 )
+api_router.include_router(goals.router, prefix='/goals', tags=["goals"])
+api_router.include_router(requirements.router, prefix='/requirements', tags=["requirements"])
